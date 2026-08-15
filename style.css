@@ -1,0 +1,600 @@
+/* =====================================================
+   PEER LEARNING - Style principal
+   Projet universitaire L1 - HTML5, CSS3 (site 100% statique, sans JS)
+   ===================================================== */
+
+/* -----------------------------------------------------
+   VARIABLES CSS (Custom Properties)
+   ----------------------------------------------------- */
+:root {
+    --couleur-principale: #4a90d9;
+    --couleur-secondaire: #2c3e50;
+    --couleur-accent: #e74c3c;
+    --couleur-fond: #f8f9fa;
+    --couleur-texte: #333333;
+    --couleur-blanc: #ffffff;
+    --couleur-ombre: rgba(0, 0, 0, 0.1);
+    --rayon-bordure: 8px;
+    --transition: all 0.3s ease;
+    --espacement: 1rem;
+}
+
+/* -----------------------------------------------------
+   RESET ET BASE
+   ----------------------------------------------------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--couleur-texte);
+    background-color: var(--couleur-fond);
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* -----------------------------------------------------
+   BARRE DE NAVIGATION
+   ----------------------------------------------------- */
+.navbar {
+    background-color: var(--couleur-blanc) !important;
+    box-shadow: 0 2px 10px var(--couleur-ombre);
+    padding: 0.8rem 0;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--couleur-principale) !important;
+}
+
+.navbar-brand i {
+    margin-right: 0.5rem;
+}
+
+.nav-link {
+    color: var(--couleur-secondaire) !important;
+    font-weight: 500;
+    padding: 0.5rem 1rem !important;
+    border-radius: var(--rayon-bordure);
+    transition: var(--transition);
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--couleur-principale) !important;
+    background-color: rgba(74, 144, 217, 0.1);
+}
+
+/* -----------------------------------------------------
+   BARRE D'EN-TÊTE (remplace l'ancienne barre de recherche JS)
+   ----------------------------------------------------- */
+.search-bar {
+    background: linear-gradient(135deg, var(--couleur-principale), #357abd);
+    padding: 3rem 0;
+    color: var(--couleur-blanc);
+    text-align: center;
+}
+
+.search-bar h2 {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+/* -----------------------------------------------------
+   SECTION HERO (Page d'accueil)
+   ----------------------------------------------------- */
+.hero {
+    background: linear-gradient(135deg, var(--couleur-principale), #357abd);
+    color: var(--couleur-blanc);
+    padding: 5rem 0;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+}
+
+.btn-primary-custom {
+    background-color: var(--couleur-blanc);
+    color: var(--couleur-principale);
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-block;
+}
+
+.btn-primary-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* -----------------------------------------------------
+   CARTES DE COURS
+   ----------------------------------------------------- */
+.course-card {
+    background: var(--couleur-blanc);
+    border-radius: var(--rayon-bordure);
+    overflow: hidden;
+    box-shadow: 0 2px 10px var(--couleur-ombre);
+    transition: var(--transition);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.course-card-img {
+    height: 180px;
+    background: linear-gradient(135deg, var(--couleur-principale), #6ab0f0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: white;
+}
+
+.course-card-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.course-card-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--couleur-secondaire);
+}
+
+.course-card-desc {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    flex-grow: 1;
+}
+
+.course-card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.course-card-tag {
+    display: inline-block;
+    background: rgba(74, 144, 217, 0.1);
+    color: var(--couleur-principale);
+    padding: 0.2rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-bottom: 0.8rem;
+}
+
+.btn-voir-cours {
+    background: var(--couleur-principale);
+    color: white;
+    padding: 0.7rem 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: none;
+    text-align: center;
+    display: block;
+    margin-top: 1rem;
+    transition: var(--transition);
+}
+
+.btn-voir-cours:hover {
+    background: var(--couleur-secondaire);
+}
+
+/* -----------------------------------------------------
+   GRILLE DE COURS (CSS Grid)
+   ----------------------------------------------------- */
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem 0;
+}
+
+/* -----------------------------------------------------
+   DÉTAIL D'UN COURS
+   ----------------------------------------------------- */
+.course-detail {
+    background: var(--couleur-blanc);
+    border-radius: var(--rayon-bordure);
+    padding: 2rem;
+    box-shadow: 0 2px 15px var(--couleur-ombre);
+    margin: 2rem 0;
+}
+
+.course-detail-header {
+    border-bottom: 2px solid var(--couleur-fond);
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.course-detail-header h1 {
+    color: var(--couleur-secondaire);
+    margin-bottom: 0.5rem;
+}
+
+.course-detail-header .meta {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+.course-detail-section {
+    margin-bottom: 2rem;
+}
+
+.course-detail-section h3 {
+    color: var(--couleur-principale);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.course-detail-section ul {
+    padding-left: 1.5rem;
+}
+
+.course-detail-section li {
+    margin-bottom: 0.5rem;
+}
+
+/* -----------------------------------------------------
+   CARTES TUTEURS
+   ----------------------------------------------------- */
+.tutor-card {
+    background: var(--couleur-blanc);
+    border-radius: var(--rayon-bordure);
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 2px 10px var(--couleur-ombre);
+    transition: var(--transition);
+    height: 100%;
+}
+
+.tutor-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+.tutor-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--couleur-principale), #6ab0f0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 2.5rem;
+    color: white;
+}
+
+.tutor-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--couleur-secondaire);
+    margin-bottom: 0.3rem;
+}
+
+.tutor-subject {
+    color: var(--couleur-principale);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.8rem;
+}
+
+.tutor-bio {
+    color: #666;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.tutor-rating {
+    color: #f1c40f;
+    font-size: 1rem;
+}
+
+.tutors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem 0;
+}
+
+/* -----------------------------------------------------
+   RESSOURCES TÉLÉCHARGEABLES
+   ----------------------------------------------------- */
+.resource-item {
+    background: var(--couleur-blanc);
+    border-radius: var(--rayon-bordure);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    box-shadow: 0 2px 8px var(--couleur-ombre);
+    transition: var(--transition);
+    margin-bottom: 1rem;
+}
+
+.resource-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.resource-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--rayon-bordure);
+    background: rgba(74, 144, 217, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--couleur-principale);
+    flex-shrink: 0;
+}
+
+.resource-info {
+    flex-grow: 1;
+}
+
+.resource-title {
+    font-weight: 600;
+    color: var(--couleur-secondaire);
+    margin-bottom: 0.3rem;
+}
+
+.resource-meta {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.resource-btn {
+    background: var(--couleur-principale);
+    color: white;
+    padding: 0.5rem 1.2rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    flex-shrink: 0;
+    display: inline-block;
+}
+
+.resource-btn:hover {
+    background: var(--couleur-secondaire);
+}
+
+/* Bouton de téléchargement désactivé : les ressources sont fictives,
+   aucun fichier réel n'est fourni avec ce projet de démonstration. */
+.resource-btn-disabled {
+    background: #b0b0b0;
+    cursor: not-allowed;
+}
+
+.resource-btn-disabled:hover {
+    background: #b0b0b0;
+}
+
+/* -----------------------------------------------------
+   FORMULAIRE DE CONTACT (validation HTML native uniquement)
+   ----------------------------------------------------- */
+.contact-form {
+    background: var(--couleur-blanc);
+    border-radius: var(--rayon-bordure);
+    padding: 2.5rem;
+    box-shadow: 0 2px 15px var(--couleur-ombre);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    color: var(--couleur-secondaire);
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: var(--rayon-bordure);
+    font-size: 1rem;
+    font-family: inherit;
+    transition: var(--transition);
+    outline: none;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: var(--couleur-principale);
+    box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.1);
+}
+
+.form-group textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+/* Validation native : le message d'erreur du navigateur
+   s'affiche automatiquement à la soumission (attributs required,
+   type="email", minlength). On met juste en évidence le champ. */
+.form-group input:invalid:not(:placeholder-shown),
+.form-group textarea:invalid:not(:placeholder-shown),
+.form-group select:invalid:not(:focus):not([value=""]) {
+    border-color: var(--couleur-accent);
+}
+
+.form-note {
+    background: #fff3cd;
+    color: #856404;
+    padding: 1rem;
+    border-radius: var(--rayon-bordure);
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.btn-submit {
+    background: var(--couleur-principale);
+    color: white;
+    padding: 0.8rem 2.5rem;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    width: 100%;
+}
+
+.btn-submit:hover {
+    background: var(--couleur-secondaire);
+    transform: translateY(-2px);
+}
+
+/* -----------------------------------------------------
+   FOOTER
+   ----------------------------------------------------- */
+.footer {
+    background: var(--couleur-secondaire);
+    color: var(--couleur-blanc);
+    padding: 3rem 0 1.5rem;
+    margin-top: 4rem;
+}
+
+.footer h5 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.footer a {
+    color: rgba(255,255,255,0.7);
+    transition: var(--transition);
+}
+
+.footer a:hover {
+    color: var(--couleur-blanc);
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 1.5rem;
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.6);
+}
+
+/* -----------------------------------------------------
+   TITRES DE SECTION
+   ----------------------------------------------------- */
+.section-title {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.section-title h2 {
+    color: var(--couleur-secondaire);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.section-title p {
+    color: #888;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* -----------------------------------------------------
+   STATISTIQUES (Page d'accueil)
+   ----------------------------------------------------- */
+.stats-section {
+    background: var(--couleur-blanc);
+    padding: 3rem 0;
+    margin: 3rem 0;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--couleur-principale);
+}
+
+.stat-label {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+/* -----------------------------------------------------
+   RESPONSIVE
+   ----------------------------------------------------- */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .courses-grid,
+    .tutors-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .resource-item {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .contact-form {
+        padding: 1.5rem;
+    }
+}
