@@ -1,0 +1,16 @@
+# Configuration du déploiement sur Render (https://render.com)
+# Render lit ce fichier automatiquement (« Blueprint »).
+services:
+  - type: web
+    name: peerlearning
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    # La base SQLite est (re)créée à chaque démarrage : sur l'offre gratuite,
+    # le disque est effacé à chaque redémarrage du serveur.
+    startCommand: flask --app app init-db && gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: SECRET_KEY
+        generateValue: true

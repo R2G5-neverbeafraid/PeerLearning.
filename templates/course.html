@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% from "macros.html" import carte_cours, etoiles, initiales, niveau_barres, section_head %}
+
+{% block title %}{{ c.titre }}{% endblock %}
+{% block description %}{{ c.description }}{% endblock %}
+
+{% block content %}
+    <!-- BANDEAU DU COURS -->
+    <section class="course-hero">
+        <div class="container">
+            <nav aria-label="Fil d'Ariane">
+                <ol class="breadcrumb-custom">
+                    <li><a href="{{ url_for('index') }}">Accueil</a></li>
+                    <li><a href="{{ url_for('courses') }}">Cours</a></li>
+                    <li aria-current="page">{{ c.titre }}</li>
+                </ol>
+            </nav>
+            <div class="course-hero-text">
+                <a class="cover-tag" href="{{ url_for('courses', categorie=c.categorie) }}">{{ c.categorie }}</a>
+                <h1>{{ c.titre }}</h1>
+                <p class="course-hero-lead">{{ c.description }}</p>
+                <ul class="course-facts">
+                    <li class="course-facts-rating">{{ etoiles(c.note) }} <strong>{{ c.note }}</strong></li>
+                    <li><i class="fas fa-user-graduate" aria-hidden="true"></i> {{ c.nb_etudiants }} étudiants</li>
+                    <li><i class="far fa-clock" aria-hidden="true"></i> {{ c.duree_heures }} heures</li>
+                    <li>{{ niveau_barres(c.niveau, clair=true) }}</li>
+                </ul>
+                <p class="course-hero-tutor">
+                    <span class="avatar avatar-sm avatar-light" aria-hidden="true">{{ initiales(c.tuteur) }}</span>
+                    Par <a href="{{ url_for('tutors') }}#tuteur-{{ c.tuteur_id }}">{{ c.tuteur }}</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="container course-layout">
+        <div class="course-main">
+            <section class="panel">
+                <h2 class="panel-title">Programme du cours</h2>
+                <p class="panel-sub">{{ chapitres | length }} chapitres · {{ c.duree_heures }} heures au total</p>
+                <ol class="chapters">
+                    {% for ch in chapitres %}
+                    <li>{{ ch.titre }}</li>
+                    {% endfor %}
+                </ol>
+            </section>
+
+            <section class="panel">
+                <h2 class="panel-title">Prérequis</h2>
+                <p class="panel-text"><i class="fas fa-check-circle" aria-hidden="true"></i> {{ c.prerequis }}</p>
+            </section>
+
+            {% if ressources %}
+            <section class="panel">
+                <h2 class="panel-title">Ressources du cours</h2>
+                <ul class="resource-mini">
+                    {% for r in ressources %}
+                    <li>
+                        <span class="resource-mini-icon"><i class="fas {{ 'fa-file-code' if r.format == 'SQL' else 'fa-file-archive' if r.format == 'ZIP' else 'fa-file-alt' }}" aria-hidden="true"></i></span>
+                        <span class="resource-mini-text">
+                            <strong>{{ r.titre }}</strong>
+                            <small>{{ r.format }} · {{ r.taille }}</small>
+                        </span>
+                        {% if r.fichier %}
+                        <a class="link-arrow" href="{{ url_for('static', filename='ressources/' ~ r.fichier) }}" download>Télécharger <i class="fas fa-download" aria-hidden="true"></i></a>
+                        {% else %}
+                        <span class="badge-soft">Bientôt</span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </section>
+            {% endif %}
+
+            <section class="panel">
+                <h2 class="panel-title">Votre tuteur</h2>
+                <div class="tutor-inline">
+                    <span class="avatar avatar-lg" aria-hidden="true">{{ initiales(c.tuteur) }}</span>
+                    <div>
+                        <a class="tutor-inline-name" href="{{ url_for('tutors') }}#tuteur-{{ tuteur.id }}">{{ c.tuteur }}</a>
+                        <p class="tutor-inline-subject">{{ tuteur.matiere }} · {{ etoiles(tuteur.note) }} {{ tuteur.note }}</p>
+                        <p class="tutor-inline-bio">{{ tuteur.bio }}</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- COLONNE LATÉRALE (reste visible au défilement) -->
+        <aside class="course-sidebar">
+            <div class="sidebar-card">
+                <div class="sidebar-cover cover-{{ c.categorie_id }}">
+                    <i class="fas {{ c.icone }}" aria-hidden="true"></i>
+                </div>
+                <div class="sidebar-body">
+                    <p class="sidebar-price">Gratuit</p>
+                    <a href="{{ url_for('contact') }}" class="btn-dark-custom btn-block">S'inscrire à une séance</a>
+                    <ul class="sidebar-list">
+                        <li><span><i class="far fa-clock" aria-hidden="true"></i> Durée</span><strong>{{ c.duree_heures }} heures</strong></li>
+                        <li><span><i class="fas fa-signal" aria-hidden="true"></i> Niveau</span><strong>{{ c.niveau }}</strong></li>
+                        <li><span><i class="fas fa-list-ol" aria-hidden="true"></i> Chapitres</span><strong>{{ chapitres | length }}</strong></li>
+                        <li><span><i class="fas fa-user-graduate" aria-hidden="true"></i> Étudiants</span><strong>{{ c.nb_etudiants }}</strong></li>
+                        <li><span><i class="fas fa-folder-open" aria-hidden="true"></i> Ressources</span><strong>{{ ressources | length }}</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <div class="container">
+        <!-- COURS PRÉCÉDENT / SUIVANT -->
+        <nav class="course-pager" aria-label="Autres cours">
+            {% if precedent %}
+            <a href="{{ url_for('course', cours_id=precedent.id) }}">
+                <span>← Cours précédent</span>{{ precedent.titre }}
+            </a>
+            {% endif %}
+            {% if suivant %}
+            <a class="next" href="{{ url_for('course', cours_id=suivant.id) }}">
+                <span>Cours suivant →</span>{{ suivant.titre }}
+            </a>
+            {% endif %}
+        </nav>
+
+        {% if similaires %}
+        <section class="section">
+            {{ section_head('À découvrir', 'Dans la même matière', '', url_for('courses', categorie=c.categorie), 'Tous les cours de ' ~ c.categorie) }}
+            <div class="courses-grid">
+                {% for s in similaires %}
+                {{ carte_cours(s) }}
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% from "macros.html" import page_header %}
+
+{% block title %}Ressources{% endblock %}
+{% block description %}Documents, aide-mémoire et projets téléchargeables gratuitement.{% endblock %}
+
+{% block content %}
+    {{ page_header('Bibliothèque', 'Ressources', 'Documents, aide-mémoire et projets téléchargeables gratuitement.') }}
+
+    <section class="container section-tight">
+        <div class="resource-list">
+            {% for r in ressources %}
+            <div class="resource-item">
+                <span class="resource-icon">
+                    <i class="fas {{ 'fa-file-archive' if r.format == 'ZIP' else 'fa-file-code' if r.format == 'SQL' else 'fa-file-alt' }}" aria-hidden="true"></i>
+                </span>
+                <div class="resource-info">
+                    <h2 class="resource-title">{{ r.titre }}</h2>
+                    <p class="resource-desc">{{ r.description }}</p>
+                    <div class="resource-meta">
+                        <span class="badge-soft">{{ r.format }}</span>
+                        <span>{{ r.taille }}</span>
+                        {% if r.cours_titre %}
+                        <a href="{{ url_for('course', cours_id=r.cours_id) }}"><i class="fas fa-book-open" aria-hidden="true"></i> {{ r.cours_titre }}</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if r.fichier %}
+                <a class="resource-btn" href="{{ url_for('static', filename='ressources/' ~ r.fichier) }}" download>
+                    <i class="fas fa-download" aria-hidden="true"></i> Télécharger
+                </a>
+                {% else %}
+                <span class="resource-btn resource-btn-disabled">Bientôt disponible</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <p class="resources-note">
+            <i class="fas fa-info-circle" aria-hidden="true"></i>
+            Les ressources marquées « Bientôt disponible » seront ajoutées prochainement.
+        </p>
+    </section>
+{% endblock %}

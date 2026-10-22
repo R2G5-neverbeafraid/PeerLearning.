@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% from "macros.html" import etoiles, initiales, page_header %}
+
+{% block title %}Tuteurs{% endblock %}
+{% block description %}Les étudiants tuteurs de Peer Learning et les cours qu'ils proposent.{% endblock %}
+
+{% block content %}
+    {{ page_header('Équipe', 'Nos tuteurs', 'Des étudiants passionnés qui partagent leurs connaissances avec leurs pairs.') }}
+
+    <section class="container section-tight">
+        <div class="tutors-grid">
+            {% for t in tuteurs %}
+            <article class="tutor-card" id="tuteur-{{ t.id }}">
+                <div class="tutor-top">
+                    <span class="avatar avatar-lg" aria-hidden="true">{{ initiales(t.prenom ~ ' ' ~ t.nom) }}</span>
+                    <div>
+                        <h2 class="tutor-name">{{ t.prenom }} {{ t.nom }}</h2>
+                        <p class="tutor-subject">{{ t.matiere }}</p>
+                    </div>
+                </div>
+                <div class="tutor-rating">{{ etoiles(t.note) }} <strong>{{ t.note }}</strong></div>
+                <p class="tutor-bio">{{ t.bio }}</p>
+                <dl class="tutor-stats">
+                    <div><dt>Cours</dt><dd>{{ t.nb_cours }}</dd></div>
+                    <div><dt>Étudiants</dt><dd>{{ t.nb_etudiants }}</dd></div>
+                </dl>
+                {% if cours_par_tuteur.get(t.id) %}
+                <ul class="tutor-courses">
+                    {% for c in cours_par_tuteur[t.id] %}
+                    <li><a href="{{ url_for('course', cours_id=c.id) }}"><i class="fas fa-book-open" aria-hidden="true"></i> {{ c.titre }}</a></li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="tutor-courses-empty"><i class="far fa-clock" aria-hidden="true"></i> Cours en préparation</p>
+                {% endif %}
+            </article>
+            {% endfor %}
+        </div>
+
+        <div class="cta-banner mt-5">
+            <div>
+                <h2>Vous maîtrisez une matière ?</h2>
+                <p>Rejoignez l'équipe et aidez d'autres étudiants à progresser.</p>
+            </div>
+            <a href="{{ url_for('become_tutor') }}" class="btn-primary-custom">Devenir tuteur <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+    </section>
+{% endblock %}

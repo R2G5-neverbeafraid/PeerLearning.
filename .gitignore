@@ -1,0 +1,9 @@
+# Base de données locale (recréée automatiquement au lancement)
+peerlearning.db
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+.pytest_cache/

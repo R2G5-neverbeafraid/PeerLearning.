@@ -1,0 +1,88 @@
+{# Macros réutilisées dans plusieurs pages #}
+
+{# Étoiles arrondies à la demi-étoile : 4.4 -> 4,5 étoiles #}
+{% macro etoiles(note) -%}
+{% set arrondi = (note * 2) | round / 2 %}
+<span class="stars" role="img" aria-label="Note : {{ note }} sur 5">
+    {%- for i in range(1, 6) -%}
+    {%- if arrondi >= i -%}
+    <i class="fas fa-star" aria-hidden="true"></i>
+    {%- elif arrondi >= i - 0.5 -%}
+    <i class="fas fa-star-half-alt" aria-hidden="true"></i>
+    {%- else -%}
+    <i class="far fa-star" aria-hidden="true"></i>
+    {%- endif -%}
+    {%- endfor -%}
+</span>
+{%- endmacro %}
+
+{# Initiales d'un nom : "Marie Makasa" -> "MM" #}
+{% macro initiales(nom) -%}
+{%- for mot in nom.split() -%}{{ mot[0] }}{%- endfor -%}
+{%- endmacro %}
+
+{# Niveau sous forme de barres (1, 2 ou 3 barres pleines) #}
+{% macro niveau_barres(niveau, clair=false) -%}
+{% set n = {'Débutant': 1, 'Intermédiaire': 2, 'Avancé': 3}.get(niveau, 1) %}
+<span class="level level-{{ n }}{% if clair %} level-light{% endif %}">
+    <span class="level-bars" aria-hidden="true"><i></i><i></i><i></i></span>{{ niveau }}
+</span>
+{%- endmacro %}
+
+{# En-tête des pages secondaires #}
+{% macro page_header(surtitre, titre, sous_titre) -%}
+<section class="page-header">
+    <div class="container">
+        <p class="eyebrow eyebrow-light">{{ surtitre }}</p>
+        <h1>{{ titre }}</h1>
+        <p class="page-header-lead">{{ sous_titre }}</p>
+    </div>
+</section>
+{%- endmacro %}
+
+{# Titre de section : surtitre + titre + texte, avec un lien optionnel à droite #}
+{% macro section_head(surtitre, titre, sous_titre='', lien=none, lien_texte='') -%}
+<div class="section-head{% if lien %} section-head-split{% endif %}">
+    <div>
+        <p class="eyebrow">{{ surtitre }}</p>
+        <h2>{{ titre }}</h2>
+        {% if sous_titre %}<p>{{ sous_titre }}</p>{% endif %}
+    </div>
+    {% if lien %}
+    <a class="link-arrow" href="{{ lien }}">{{ lien_texte }} <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    {% endif %}
+</div>
+{%- endmacro %}
+
+{# Carte d'un cours (catalogue, accueil, cours similaires).
+   Le lien du titre s'étend à toute la carte (classe stretched-link). #}
+{% macro carte_cours(c) -%}
+<article class="course-card">
+    <div class="course-cover cover-{{ c.categorie_id }}">
+        <span class="cover-tag">{{ c.categorie }}</span>
+        <i class="fas {{ c.icone }}" aria-hidden="true"></i>
+    </div>
+    <div class="course-card-body">
+        {{ niveau_barres(c.niveau) }}
+        <h3 class="course-card-title">
+            <a class="stretched-link" href="{{ url_for('course', cours_id=c.id) }}">{{ c.titre }}</a>
+        </h3>
+        <p class="course-card-desc">{{ c.description }}</p>
+        <ul class="course-card-meta">
+            <li><i class="far fa-clock" aria-hidden="true"></i> {{ c.duree_heures }} h</li>
+            <li><i class="fas fa-user-graduate" aria-hidden="true"></i> {{ c.nb_etudiants }} étudiants</li>
+            <li class="meta-rating"><i class="fas fa-star" aria-hidden="true"></i> {{ c.note }}</li>
+        </ul>
+    </div>
+    <div class="course-card-footer">
+        <span class="avatar avatar-sm" aria-hidden="true">{{ initiales(c.tuteur) }}</span>
+        <span class="course-card-tutor">{{ c.tuteur }}</span>
+        <span class="course-card-go" aria-hidden="true"><i class="fas fa-arrow-right"></i></span>
+    </div>
+</article>
+{%- endmacro %}
+
+{# Message d'erreur sous un champ de formulaire #}
+{% macro erreur(erreurs, champ) -%}
+{% if erreurs.get(champ) %}<p class="form-error" id="{{ champ }}-erreur"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> {{ erreurs[champ] }}</p>{% endif %}
+{%- endmacro %}
