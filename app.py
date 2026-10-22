@@ -89,7 +89,24 @@ def index():
                (SELECT COUNT(*) FROM ressources)              AS nb_ressources
     """).fetchone()
     populaires = db.execute(SELECT_COURS + " ORDER BY cours.nb_etudiants DESC LIMIT 3").fetchall()
-    return render_template("index.html", stats=stats, populaires=populaires)
+    # Programme du cours le plus suivi, affiché dans l'aperçu du bandeau d'accueil
+    chapitres_vedette = []
+    if populaires:
+        chapitres_vedette = db.execute(
+            "SELECT titre FROM chapitres WHERE cours_id = ? ORDER BY ordre LIMIT 4",
+            (populaires[0]["id"],),
+        ).fetchall()
+    categories = db.execute("""
+        SELECT categories.nom, COUNT(cours.id) AS nb_cours
+        FROM categories
+        LEFT JOIN cours ON cours.categorie_id = categories.id
+        GROUP BY categories.id
+        ORDER BY categories.nom
+    """).fetchall()
+    return render_template(
+        "index.html", stats=stats, populaires=populaires,
+        chapitres_vedette=chapitres_vedette, categories=categories,
+    )
 
 
 @app.route("/cours")
@@ -135,6 +152,7 @@ def course(cours_id):
     chapitres = db.execute(
         "SELECT titre FROM chapitres WHERE cours_id = ? ORDER BY ordre", (cours_id,)
     ).fetchall()
+    tuteur = db.execute("SELECT * FROM tuteurs WHERE id = ?", (c["tuteur_id"],)).fetchone()
     ressources = db.execute(
         "SELECT * FROM ressources WHERE cours_id = ? ORDER BY id", (cours_id,)
     ).fetchall()
@@ -149,7 +167,7 @@ def course(cours_id):
         "SELECT id, titre FROM cours WHERE id > ? ORDER BY id LIMIT 1", (cours_id,)
     ).fetchone()
     return render_template(
-        "course.html", c=c, chapitres=chapitres, ressources=ressources,
+        "course.html", c=c, tuteur=tuteur, chapitres=chapitres, ressources=ressources,
         similaires=similaires, precedent=precedent, suivant=suivant,
     )
 

@@ -2,43 +2,69 @@
    PEER LEARNING - Style principal
    Direction artistique : épurée, bleu nuit / gris / blanc
    Projet universitaire L1 - HTML5, CSS3 (pages générées par Flask + SQLite)
+
+   Sommaire
+   1. Variables          8. Catalogue et filtres
+   2. Base               9. Page d'un cours
+   3. Composants        10. Tuteurs
+   4. Boutons           11. Ressources
+   5. Navigation        12. FAQ, contact, formulaires
+   6. Accueil           13. Pied de page
+   7. Cartes de cours   14. Responsive
    ===================================================== */
 
 /* -----------------------------------------------------
-   VARIABLES CSS (Custom Properties)
+   1. VARIABLES CSS
    Palette volontairement restreinte à trois familles de
    couleurs : bleu nuit (principale), gris, blanc.
    ----------------------------------------------------- */
 :root {
     --couleur-principale: #16213E;       /* Bleu nuit - boutons, badges, liens actifs */
-    --couleur-principale-clair: #2E3F66; /* Bleu nuit clair - survols */
-    --couleur-secondaire: #0D1526;       /* Bleu nuit profond - footer, titres */
+    --couleur-principale-clair: #2E3F66; /* Bleu nuit clair - survols, dégradés */
+    --couleur-secondaire: #0D1526;       /* Bleu nuit profond - bandeaux, footer, titres */
     --couleur-erreur: #B3453A;           /* Rouge sourd - uniquement pour les erreurs de formulaire */
     --couleur-fond: #F5F6F8;             /* Blanc cassé - fond de page */
     --couleur-texte: #2A2E35;            /* Gris anthracite - texte principal */
     --couleur-texte-att: #6B7280;        /* Gris moyen - texte secondaire */
     --couleur-blanc: #ffffff;
     --couleur-bordure: #E3E6EB;          /* Gris perle - bordures fines */
-    --couleur-ombre: rgba(22, 33, 62, 0.07);
-    --rayon-bordure: 14px;
-    --transition: all 0.25s ease;
-    --espacement: 1rem;
+
+    /* Teintes du bleu nuit (même couleur, plus ou moins transparente) */
+    --teinte-legere: rgba(22, 33, 62, 0.05);
+    --teinte: rgba(22, 33, 62, 0.08);
+    --teinte-forte: rgba(22, 33, 62, 0.14);
+
+    --ombre-legere: 0 1px 2px rgba(13, 21, 38, 0.04), 0 2px 8px rgba(13, 21, 38, 0.04);
+    --ombre: 0 12px 32px rgba(13, 21, 38, 0.10);
+    --ombre-forte: 0 24px 60px rgba(13, 21, 38, 0.28);
+
+    --rayon-bordure: 16px;
+    --rayon-petit: 10px;
+    --transition: all 0.2s ease;
+
+    --police-texte: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+    --police-titres: 'Plus Jakarta Sans', var(--police-texte);
+
+    /* Motif de points discret pour les bandeaux sombres */
+    --motif-points: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
 }
 
 /* -----------------------------------------------------
-   RESET ET BASE
+   2. BASE
    ----------------------------------------------------- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
-    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+    font-family: var(--police-texte);
     color: var(--couleur-texte);
     background-color: var(--couleur-fond);
     line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4,
+.brand,
+.stat-number {
+    font-family: var(--police-titres);
+    letter-spacing: -0.01em;
 }
 
 a {
@@ -50,99 +76,18 @@ a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
-select:focus-visible {
+select:focus-visible,
+summary:focus-visible {
     outline: 2px solid var(--couleur-principale);
     outline-offset: 2px;
 }
 
-/* -----------------------------------------------------
-   BARRE DE NAVIGATION
-   ----------------------------------------------------- */
-.navbar {
-    background-color: var(--couleur-blanc) !important;
-    border-bottom: 1px solid var(--couleur-bordure);
-    padding: 1rem 0;
-}
-
-.navbar-brand {
-    font-weight: 700;
-    font-size: 1.3rem;
-    letter-spacing: 0.02em;
-    color: var(--couleur-principale) !important;
-}
-
-.navbar-brand i {
-    margin-right: 0.5rem;
-}
-
-.nav-link {
-    color: var(--couleur-texte-att) !important;
-    font-weight: 600;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: 0.5rem 0.9rem !important;
-    border-bottom: 2px solid transparent;
-    transition: var(--transition);
-}
-
-.nav-link:hover,
-.nav-link.active {
-    color: var(--couleur-principale) !important;
-    border-bottom-color: var(--couleur-principale);
-}
-
-.nav-menu {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.25rem;
-    list-style: none;
-    margin: 0 0 0 auto;
-    padding: 0;
-}
-
-.nav-cta {
-    display: inline-block;
-    margin-left: 0.6rem;
-    padding: 0.5rem 1.2rem;
-    border-radius: 50px;
-    background: var(--couleur-principale);
-    color: var(--couleur-blanc);
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    transition: var(--transition);
-}
-
-.nav-cta:hover,
-.nav-cta.active {
-    background: var(--couleur-secondaire);
-    color: var(--couleur-blanc);
-}
-
-/* Menu mobile sans JS : la case à cocher est cachée visuellement
-   (mais reste accessible au clavier), le label sert de bouton. */
-.menu-toggle {
-    position: absolute;
-    opacity: 0;
-    width: 1px;
-    height: 1px;
-}
-
-.menu-btn {
-    display: none;
-    cursor: pointer;
-    font-size: 1.3rem;
+code {
     color: var(--couleur-principale);
-    padding: 0.3rem 0.6rem;
-    border-radius: 8px;
-}
-
-.menu-toggle:focus-visible + .menu-btn {
-    outline: 2px solid var(--couleur-principale);
-    outline-offset: 2px;
+    background: var(--teinte);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.85em;
 }
 
 /* Lien d'évitement : visible uniquement au clavier */
@@ -159,122 +104,304 @@ select:focus-visible {
 
 .skip-link:focus {
     top: 1rem;
+    color: var(--couleur-blanc);
+}
+
+/* Espacements verticaux des sections */
+.section {
+    padding-top: 4.5rem;
+}
+
+.section-tight {
+    padding-top: 2.5rem;
+}
+
+.section-white {
+    background: var(--couleur-blanc);
+    border-top: 1px solid var(--couleur-bordure);
+    border-bottom: 1px solid var(--couleur-bordure);
+    padding-bottom: 4.5rem;
+    margin-top: 4.5rem;
 }
 
 /* -----------------------------------------------------
-   BANDEAU D'EN-TÊTE (pages secondaires)
+   3. COMPOSANTS RÉUTILISABLES
    ----------------------------------------------------- */
-.page-header {
-    background: var(--couleur-secondaire);
-    padding: 3.5rem 0;
-    color: var(--couleur-blanc);
-    text-align: center;
-}
 
-.page-header h1 {
+/* Petit surtitre au-dessus des titres */
+.eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
     font-weight: 700;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: 1.5rem;
+    color: var(--couleur-principale-clair);
     margin-bottom: 0.6rem;
 }
 
-.page-header p {
-    color: rgba(255, 255, 255, 0.65);
-    font-size: 0.95rem;
+.eyebrow-light {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Titre de section */
+.section-head {
+    margin-bottom: 2rem;
+    max-width: 640px;
+}
+
+.section-head h2 {
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: 700;
+    color: var(--couleur-secondaire);
+    margin-bottom: 0.5rem;
+}
+
+.section-head p:not(.eyebrow) {
+    color: var(--couleur-texte-att);
+    margin: 0;
+}
+
+.section-head-split {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    max-width: none;
+}
+
+/* Lien avec flèche */
+.link-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--couleur-principale);
+    white-space: nowrap;
+}
+
+.link-arrow i {
+    font-size: 0.8em;
+    transition: var(--transition);
+}
+
+.link-arrow:hover {
+    color: var(--couleur-principale-clair);
+}
+
+.link-arrow:hover i {
+    transform: translateX(3px);
+}
+
+/* Pastille discrète */
+.badge-soft {
+    display: inline-block;
+    background: var(--teinte);
+    color: var(--couleur-principale);
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    letter-spacing: 0.03em;
+}
+
+/* Avatar avec initiales */
+.avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--couleur-principale);
+    color: var(--couleur-blanc);
+    font-family: var(--police-titres);
+    font-weight: 700;
+}
+
+.avatar-sm {
+    width: 32px;
+    height: 32px;
+    font-size: 0.72rem;
+}
+
+.avatar-lg {
+    width: 64px;
+    height: 64px;
+    font-size: 1.25rem;
+}
+
+.avatar-light {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.stars {
+    color: var(--couleur-principale);
+    font-size: 0.85em;
+    letter-spacing: 0.05em;
+}
+
+/* Niveau : 3 barres de hauteur croissante */
+.level {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--couleur-principale-clair);
+}
+
+.level-bars {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 12px;
+}
+
+.level-bars i {
+    width: 4px;
+    border-radius: 1px;
+    background: var(--teinte-forte);
+}
+
+.level-bars i:nth-child(1) { height: 5px; }
+.level-bars i:nth-child(2) { height: 8px; }
+.level-bars i:nth-child(3) { height: 12px; }
+
+.level-1 .level-bars i:nth-child(-n+1),
+.level-2 .level-bars i:nth-child(-n+2),
+.level-3 .level-bars i:nth-child(-n+3) {
+    background: currentColor;
+}
+
+.level-light {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.level-light .level-bars i {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* Message de confirmation après l'envoi d'un formulaire */
+.flash-message {
+    background: var(--couleur-blanc);
+    border: 1px solid var(--couleur-bordure);
+    border-left: 4px solid var(--couleur-principale);
+    border-radius: var(--rayon-petit);
+    padding: 1rem 1.25rem;
+    color: var(--couleur-secondaire);
+    font-weight: 600;
+    box-shadow: var(--ombre-legere);
+}
+
+/* État vide / page 404 */
+.empty-state {
+    text-align: center;
+    padding: 3.5rem 1rem;
+    color: var(--couleur-texte-att);
+}
+
+.empty-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--teinte);
+    color: var(--couleur-principale);
+    font-size: 1.4rem;
+    margin-bottom: 1.25rem;
+}
+
+.empty-state h1,
+.empty-state h2 {
+    color: var(--couleur-secondaire);
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    margin-bottom: 1.5rem;
+}
+
+.error-code {
+    font-family: var(--police-titres);
+    font-size: 5rem;
+    font-weight: 800;
+    color: var(--couleur-principale);
+    line-height: 1;
+    margin-bottom: 1rem !important;
 }
 
 /* -----------------------------------------------------
-   SECTION HERO (Page d'accueil)
+   4. BOUTONS
    ----------------------------------------------------- */
-.hero {
-    background: linear-gradient(160deg, var(--couleur-principale), var(--couleur-secondaire));
-    color: var(--couleur-blanc);
-    padding: 6rem 0 5.5rem;
-    text-align: center;
-}
-
-.hero h1 {
-    font-size: 2.6rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    margin-bottom: 1.2rem;
-}
-
-.hero p {
-    font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.75);
-    max-width: 560px;
-    margin: 0 auto 2.2rem;
-}
-
-.btn-primary-custom {
-    background-color: var(--couleur-blanc);
-    color: var(--couleur-principale);
-    padding: 0.85rem 2.2rem;
-    border-radius: 50px;
+.btn-primary-custom,
+.btn-outline-custom,
+.btn-dark-custom,
+.btn-light-custom,
+.btn-submit,
+.btn-filter,
+.resource-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.6rem;
+    border-radius: var(--rayon-petit);
+    border: 1px solid transparent;
     font-weight: 600;
-    font-size: 0.95rem;
-    border: none;
+    font-size: 0.92rem;
+    line-height: 1.2;
     cursor: pointer;
     transition: var(--transition);
-    display: inline-block;
+}
+
+/* Blanc, sur fond bleu nuit */
+.btn-primary-custom {
+    background: var(--couleur-blanc);
+    color: var(--couleur-principale);
 }
 
 .btn-primary-custom:hover {
-    background-color: var(--couleur-fond);
-    transform: translateY(-2px);
+    background: var(--couleur-fond);
+    color: var(--couleur-principale);
+    transform: translateY(-1px);
 }
 
-.hero-actions {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-/* Bouton contour blanc (sur fond bleu nuit) */
+/* Contour blanc, sur fond bleu nuit */
 .btn-outline-custom {
-    display: inline-block;
-    padding: 0.85rem 2.2rem;
-    border-radius: 50px;
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-color: rgba(255, 255, 255, 0.3);
     color: var(--couleur-blanc);
-    font-weight: 600;
-    font-size: 0.95rem;
-    transition: var(--transition);
 }
 
 .btn-outline-custom:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: var(--couleur-blanc);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.6);
     color: var(--couleur-blanc);
 }
 
-/* Boutons sur fond clair */
+/* Bleu nuit, sur fond clair */
 .btn-dark-custom,
-.btn-light-custom {
-    display: inline-block;
-    padding: 0.8rem 2rem;
-    border-radius: 50px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: var(--transition);
-}
-
-.btn-dark-custom {
+.btn-submit,
+.btn-filter,
+.resource-btn {
     background: var(--couleur-principale);
     color: var(--couleur-blanc);
 }
 
-.btn-dark-custom:hover {
-    background: var(--couleur-secondaire);
+.btn-dark-custom:hover,
+.btn-submit:hover,
+.btn-filter:hover,
+.resource-btn:hover {
+    background: var(--couleur-principale-clair);
     color: var(--couleur-blanc);
-    transform: translateY(-2px);
 }
 
+/* Contour, sur fond clair */
 .btn-light-custom {
-    border: 1px solid var(--couleur-bordure);
+    border-color: var(--couleur-bordure);
+    background: var(--couleur-blanc);
     color: var(--couleur-principale);
 }
 
@@ -282,125 +409,773 @@ select:focus-visible {
     border-color: var(--couleur-principale);
 }
 
-/* Lien dans un texte */
-.text-link {
-    color: var(--couleur-principale);
-    font-weight: 600;
-    border-bottom: 1px solid rgba(22, 33, 62, 0.25);
-}
-
-.text-link:hover {
-    border-bottom-color: var(--couleur-principale);
+.btn-block,
+.btn-submit {
+    display: flex;
+    width: 100%;
 }
 
 /* -----------------------------------------------------
-   CARTES DE COURS
+   5. NAVIGATION
    ----------------------------------------------------- */
+.site-nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: saturate(180%) blur(10px);
+    border-bottom: 1px solid var(--couleur-bordure);
+}
+
+.nav-inner {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    min-height: 70px;
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--couleur-secondaire);
+}
+
+.brand:hover {
+    color: var(--couleur-secondaire);
+}
+
+.brand-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--rayon-petit);
+    background: var(--couleur-principale);
+    color: var(--couleur-blanc);
+    font-size: 0.95rem;
+}
+
+.brand-light,
+.brand-light:hover {
+    color: var(--couleur-blanc);
+}
+
+.brand-light .brand-mark {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    list-style: none;
+    margin: 0 0 0 auto;
+    padding: 0;
+}
+
+.nav-item-link {
+    display: block;
+    padding: 0.5rem 0.85rem;
+    border-radius: 8px;
+    color: var(--couleur-texte-att);
+    font-weight: 500;
+    font-size: 0.92rem;
+    transition: var(--transition);
+}
+
+.nav-item-link:hover {
+    color: var(--couleur-principale);
+    background: var(--teinte-legere);
+}
+
+.nav-item-link.active {
+    color: var(--couleur-principale);
+    font-weight: 600;
+    background: var(--teinte);
+}
+
+.nav-cta {
+    display: inline-block;
+    margin-left: 0.75rem;
+    padding: 0.55rem 1.1rem;
+    border-radius: var(--rayon-petit);
+    background: var(--couleur-principale);
+    color: var(--couleur-blanc);
+    font-size: 0.88rem;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.nav-cta:hover,
+.nav-cta[aria-current] {
+    background: var(--couleur-principale-clair);
+    color: var(--couleur-blanc);
+}
+
+/* Menu mobile sans JS : la case à cocher est cachée visuellement
+   (mais reste accessible au clavier), le label sert de bouton. */
+.menu-toggle {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+}
+
+.menu-btn {
+    display: none;
+    cursor: pointer;
+    font-size: 1.15rem;
+    color: var(--couleur-principale);
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-petit);
+    text-align: center;
+    line-height: 40px;
+    margin: 0;
+}
+
+.menu-toggle:focus-visible + .menu-btn {
+    outline: 2px solid var(--couleur-principale);
+    outline-offset: 2px;
+}
+
+/* -----------------------------------------------------
+   6. ACCUEIL
+   ----------------------------------------------------- */
+.hero {
+    background-color: var(--couleur-secondaire);
+    background-image: var(--motif-points), linear-gradient(150deg, var(--couleur-principale), var(--couleur-secondaire));
+    background-size: 22px 22px, auto;
+    color: var(--couleur-blanc);
+    padding: 5rem 0 7rem;
+    overflow: hidden;
+}
+
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.05);
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 1.5rem;
+}
+
+.hero h1 {
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.25rem;
+}
+
+.hero h1 span {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.hero-lead {
+    font-size: 1.12rem;
+    color: rgba(255, 255, 255, 0.72);
+    max-width: 520px;
+    margin-bottom: 2rem;
+}
+
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+}
+
+.hero-points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0 0;
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.hero-points i {
+    margin-right: 0.35rem;
+    color: var(--couleur-blanc);
+}
+
+/* Aperçu d'un cours (décoratif) */
+.hero-visual {
+    position: relative;
+    padding: 1rem 0 3.25rem 2rem;
+}
+
+.preview-card {
+    background: var(--couleur-blanc);
+    color: var(--couleur-texte);
+    border-radius: var(--rayon-bordure);
+    padding: 1.5rem;
+    box-shadow: var(--ombre-forte);
+    transform: rotate(1.5deg);
+}
+
+.preview-head {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-bottom: 1.25rem;
+}
+
+.preview-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--couleur-principale);
+    color: var(--couleur-blanc);
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.preview-cat {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--couleur-texte-att);
+    margin: 0;
+}
+
+.preview-title {
+    font-family: var(--police-titres);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--couleur-secondaire);
+    margin: 0;
+}
+
+.preview-progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: var(--couleur-texte-att);
+    margin-bottom: 0.4rem;
+}
+
+.progress-track {
+    height: 6px;
+    border-radius: 6px;
+    background: var(--teinte);
+    overflow: hidden;
+}
+
+.progress-track span {
+    display: block;
+    width: 34%;
+    height: 100%;
+    border-radius: 6px;
+    background: var(--couleur-principale);
+}
+
+.preview-chapters {
+    list-style: none;
+    padding: 0;
+    margin: 1.25rem 0;
+    font-size: 0.88rem;
+}
+
+.preview-chapters li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--couleur-bordure);
+    color: var(--couleur-texte-att);
+}
+
+.preview-chapters li:last-child {
+    border-bottom: none;
+}
+
+.preview-chapters i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--teinte);
+    font-size: 0.6rem;
+    flex-shrink: 0;
+}
+
+.preview-chapters li.done {
+    color: var(--couleur-texte);
+}
+
+.preview-chapters li.done i {
+    background: var(--couleur-principale);
+    color: var(--couleur-blanc);
+}
+
+.preview-chapters li.current {
+    color: var(--couleur-secondaire);
+    font-weight: 600;
+}
+
+.preview-chapters li.current i {
+    background: var(--teinte-forte);
+    color: var(--couleur-principale);
+}
+
+.preview-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--couleur-bordure);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.preview-rating {
+    margin-left: auto;
+    font-weight: 700;
+    color: var(--couleur-principale);
+}
+
+.preview-badge {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--couleur-blanc);
+    color: var(--couleur-texte);
+    border-radius: 12px;
+    padding: 0.75rem 1.1rem;
+    box-shadow: var(--ombre);
+}
+
+.preview-badge-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--teinte);
+    color: var(--couleur-principale);
+}
+
+.preview-badge strong {
+    display: block;
+    font-family: var(--police-titres);
+    font-size: 1.1rem;
+    color: var(--couleur-secondaire);
+    line-height: 1.1;
+}
+
+.preview-badge span:not(.preview-badge-icon) {
+    font-size: 0.75rem;
+    color: var(--couleur-texte-att);
+}
+
+/* Statistiques : carte qui chevauche le bas du hero */
+.stats-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin-top: -3.5rem;
+    background: var(--couleur-blanc);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    box-shadow: var(--ombre);
+}
+
+.stat {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.6rem 1.75rem;
+}
+
+.stat + .stat {
+    border-left: 1px solid var(--couleur-bordure);
+}
+
+.stat-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: var(--teinte);
+    color: var(--couleur-principale);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.stat-number {
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: var(--couleur-secondaire);
+    line-height: 1.1;
+}
+
+.stat-label {
+    font-size: 0.82rem;
+    color: var(--couleur-texte-att);
+}
+
+/* Matières */
+.subjects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.subject-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: var(--couleur-blanc);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    transition: var(--transition);
+}
+
+.subject-card:hover {
+    border-color: var(--couleur-principale-clair);
+    box-shadow: var(--ombre-legere);
+    transform: translateY(-2px);
+}
+
+.subject-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--couleur-principale);
+    color: var(--couleur-blanc);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.subject-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.subject-text strong {
+    font-family: var(--police-titres);
+    color: var(--couleur-secondaire);
+}
+
+.subject-text small {
+    color: var(--couleur-texte-att);
+    font-size: 0.82rem;
+}
+
+.subject-arrow {
+    margin-left: auto;
+    color: var(--couleur-texte-att);
+    font-size: 0.85rem;
+    transition: var(--transition);
+}
+
+.subject-card:hover .subject-arrow {
+    color: var(--couleur-principale);
+    transform: translateX(3px);
+}
+
+.subject-card-dashed {
+    border-style: dashed;
+    background: transparent;
+}
+
+.subject-card-dashed .subject-icon {
+    background: var(--teinte);
+    color: var(--couleur-principale);
+}
+
+/* Étapes « Comment ça marche » */
+.steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: etape;
+}
+
+.step {
+    position: relative;
+}
+
+/* Trait qui relie les étapes */
+.step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 22px;
+    left: 60px;
+    right: -1rem;
+    height: 1px;
+    background: var(--couleur-bordure);
+}
+
+.step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--couleur-principale);
+    color: var(--couleur-blanc);
+    font-family: var(--police-titres);
+    font-weight: 700;
+    margin-bottom: 1.1rem;
+}
+
+.step h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--couleur-secondaire);
+    margin-bottom: 0.4rem;
+}
+
+.step p {
+    color: var(--couleur-texte-att);
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+/* Bandeau d'appel à l'action */
+.cta-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    background-color: var(--couleur-secondaire);
+    background-image: var(--motif-points), linear-gradient(150deg, var(--couleur-principale), var(--couleur-secondaire));
+    background-size: 22px 22px, auto;
+    color: var(--couleur-blanc);
+    border-radius: var(--rayon-bordure);
+    padding: 2.75rem 3rem;
+}
+
+.cta-banner h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+}
+
+.cta-banner p {
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+}
+
+/* -----------------------------------------------------
+   7. CARTES DE COURS
+   ----------------------------------------------------- */
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 1.5rem;
+}
+
 .course-card {
+    position: relative; /* pour le lien étiré sur toute la carte */
+    display: flex;
+    flex-direction: column;
     background: var(--couleur-blanc);
     border: 1px solid var(--couleur-bordure);
     border-radius: var(--rayon-bordure);
     overflow: hidden;
     transition: var(--transition);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
 }
 
 .course-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 28px var(--couleur-ombre);
-    border-color: var(--couleur-principale-clair);
+    box-shadow: var(--ombre);
+    border-color: transparent;
 }
 
-/* Badge circulaire : remplace l'ancien bandeau plein-largeur
-   par une pastille d'icône centrée, plus sobre. */
-.course-card-img {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background: var(--couleur-principale);
+/* Bannière colorée en haut de la carte (une teinte par matière) */
+.course-cover,
+.sidebar-cover {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    height: 140px;
+    background-image: var(--motif-points), linear-gradient(135deg, var(--couleur-principale), var(--couleur-secondaire));
+    background-size: 18px 18px, auto;
     color: var(--couleur-blanc);
-    margin: 2rem auto 0;
+    font-size: 2.6rem;
+}
+
+.cover-2 {
+    background-image: var(--motif-points), linear-gradient(135deg, var(--couleur-principale-clair), var(--couleur-principale));
+}
+
+.course-cover i,
+.sidebar-cover i {
+    opacity: 0.9;
+    transition: var(--transition);
+}
+
+.course-card:hover .course-cover i {
+    transform: scale(1.08);
+}
+
+.cover-tag {
+    display: inline-block;
+    padding: 0.25rem 0.7rem;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: var(--couleur-blanc);
+    font-family: var(--police-texte);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+}
+
+.course-cover .cover-tag {
+    position: absolute;
+    top: 0.9rem;
+    left: 0.9rem;
 }
 
 .course-card-body {
-    padding: 1.5rem 1.5rem 1.75rem;
     flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
+    padding: 1.25rem 1.4rem 1rem;
 }
 
 .course-card-title {
-    font-size: 1.15rem;
+    font-size: 1.12rem;
     font-weight: 700;
-    margin-bottom: 0.6rem;
+    line-height: 1.35;
+    margin: 0.6rem 0 0.5rem;
     color: var(--couleur-secondaire);
 }
 
+.course-card-title a:hover {
+    color: var(--couleur-principale-clair);
+}
+
+/* Description limitée à 2 lignes */
 .course-card-desc {
     color: var(--couleur-texte-att);
     font-size: 0.9rem;
-    margin-bottom: 1.2rem;
-    flex-grow: 1;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .course-card-meta {
     display: flex;
-    justify-content: center;
-    gap: 1.25rem;
-    align-items: center;
-    font-size: 0.85rem;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.82rem;
     color: var(--couleur-texte-att);
-    margin-bottom: 1rem;
 }
 
-.course-card-tag {
-    display: inline-block;
-    background: rgba(22, 33, 62, 0.06);
-    color: var(--couleur-principale);
-    padding: 0.25rem 0.9rem;
-    border-radius: 20px;
-    font-size: 0.7rem;
+.course-card-meta i {
+    margin-right: 0.25rem;
+}
+
+.meta-rating {
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin: 1rem auto 0.6rem;
+    color: var(--couleur-principale);
 }
 
-.btn-voir-cours {
-    background: var(--couleur-principale);
-    color: var(--couleur-blanc);
-    padding: 0.7rem 1rem;
-    border-radius: 50px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    border: none;
-    text-align: center;
-    display: block;
-    margin-top: auto;
-    transition: var(--transition);
-}
-
-.btn-voir-cours:hover {
-    background: var(--couleur-secondaire);
-    color: var(--couleur-blanc);
+.course-card-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.9rem 1.4rem;
+    border-top: 1px solid var(--couleur-bordure);
 }
 
 .course-card-tutor {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--couleur-texte);
+}
+
+.course-card-go {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--teinte);
+    color: var(--couleur-principale);
     font-size: 0.8rem;
-    color: var(--couleur-texte-att);
-    margin-bottom: 1rem;
+    transition: var(--transition);
+}
+
+.course-card:hover .course-card-go {
+    background: var(--couleur-principale);
+    color: var(--couleur-blanc);
 }
 
 /* -----------------------------------------------------
-   RECHERCHE ET FILTRES (page Cours)
+   8. EN-TÊTE DES PAGES, CATALOGUE ET FILTRES
    ----------------------------------------------------- */
+.page-header {
+    background-color: var(--couleur-secondaire);
+    background-image: var(--motif-points), linear-gradient(150deg, var(--couleur-principale), var(--couleur-secondaire));
+    background-size: 22px 22px, auto;
+    color: var(--couleur-blanc);
+    padding: 3.5rem 0 3.25rem;
+}
+
+.page-header h1 {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 800;
+    margin-bottom: 0.6rem;
+}
+
+.page-header-lead {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.05rem;
+    max-width: 600px;
+    margin: 0;
+}
+
 .course-filters {
     display: flex;
     flex-wrap: wrap;
@@ -408,24 +1183,37 @@ select:focus-visible {
     background: var(--couleur-blanc);
     border: 1px solid var(--couleur-bordure);
     border-radius: var(--rayon-bordure);
-    padding: 1rem;
+    box-shadow: var(--ombre-legere);
+    padding: 0.85rem;
 }
 
 .course-filters input,
 .course-filters select {
     width: 100%;
-    padding: 0.65rem 1rem;
+    height: 46px;
+    padding: 0 1rem;
     border: 1px solid var(--couleur-bordure);
-    border-radius: 50px;
+    border-radius: var(--rayon-petit);
     font-family: inherit;
-    font-size: 0.9rem;
+    font-size: 0.92rem;
     color: var(--couleur-texte);
-    background: var(--couleur-blanc);
+    background-color: var(--couleur-fond);
+    transition: var(--transition);
+}
+
+.course-filters input:focus,
+.course-filters select:focus {
+    background-color: var(--couleur-blanc);
+    border-color: var(--couleur-principale);
 }
 
 .filter-search {
     position: relative;
-    flex: 1 1 240px;
+    flex: 1 1 280px;
+}
+
+.filter-select {
+    flex: 0 1 210px;
 }
 
 .filter-search i {
@@ -438,29 +1226,22 @@ select:focus-visible {
 }
 
 .filter-search input {
-    padding-left: 2.5rem;
+    padding-left: 2.6rem;
 }
 
 .btn-filter {
-    background: var(--couleur-principale);
-    color: var(--couleur-blanc);
-    border: none;
-    border-radius: 50px;
-    padding: 0.65rem 1.6rem;
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.btn-filter:hover {
-    background: var(--couleur-secondaire);
+    height: 46px;
+    padding: 0 1.75rem;
 }
 
 .results-count {
-    margin: 1.25rem 0 0;
-    font-size: 0.85rem;
+    margin: 1.5rem 0 1.25rem;
+    font-size: 0.9rem;
     color: var(--couleur-texte-att);
+}
+
+.results-count strong {
+    color: var(--couleur-secondaire);
 }
 
 .results-count a {
@@ -468,124 +1249,159 @@ select:focus-visible {
     font-weight: 600;
 }
 
-.empty-state {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: var(--couleur-texte-att);
-}
-
-.empty-state > i {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    color: var(--couleur-bordure);
-}
-
-.empty-state h1 {
-    color: var(--couleur-secondaire);
-    font-size: 1.6rem;
-    margin-bottom: 0.6rem;
-}
-
-.empty-state p {
-    margin-bottom: 1.5rem;
-}
-
-.error-code {
-    font-size: 4.5rem;
-    font-weight: 700;
-    color: var(--couleur-principale);
-    line-height: 1;
-}
-
 /* -----------------------------------------------------
-   GRILLE DE COURS (CSS Grid)
+   9. PAGE D'UN COURS
    ----------------------------------------------------- */
-.courses-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
-    padding: 2rem 0;
+.course-hero {
+    background-color: var(--couleur-secondaire);
+    background-image: var(--motif-points), linear-gradient(150deg, var(--couleur-principale), var(--couleur-secondaire));
+    background-size: 22px 22px, auto;
+    color: var(--couleur-blanc);
+    padding: 2rem 0 3.5rem;
 }
 
-/* -----------------------------------------------------
-   DÉTAIL D'UN COURS
-   ----------------------------------------------------- */
-.course-detail {
-    background: var(--couleur-blanc);
-    border: 1px solid var(--couleur-bordure);
-    border-radius: var(--rayon-bordure);
-    padding: 2.5rem;
-    margin: 2rem 0;
+.course-hero-text {
+    max-width: 680px;
 }
 
-.course-detail-header {
-    border-bottom: 1px solid var(--couleur-bordure);
-    padding-bottom: 1.5rem;
-    margin-bottom: 2rem;
+.course-hero h1 {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 800;
+    margin: 1rem 0 0.75rem;
 }
 
-.course-detail-header h1 {
-    color: var(--couleur-secondaire);
-    margin: 0.6rem 0 0.6rem;
-    font-size: 1.9rem;
+.course-hero-lead {
+    font-size: 1.08rem;
+    color: rgba(255, 255, 255, 0.75);
+    margin-bottom: 1.25rem;
+}
+
+.course-hero .cover-tag:hover {
+    background: rgba(255, 255, 255, 0.22);
 }
 
 .course-facts {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 0.5rem 1.5rem;
     list-style: none;
     padding: 0;
-    margin: 0;
-    color: var(--couleur-texte-att);
+    margin: 0 0 1.25rem;
     font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
 }
 
-.course-facts a {
-    color: var(--couleur-principale);
+.course-facts i {
+    margin-right: 0.3rem;
 }
 
-.stars {
-    color: var(--couleur-principale);
-    letter-spacing: 0.05em;
+.course-facts-rating .stars {
+    color: var(--couleur-blanc);
 }
 
-/* Fil d'Ariane */
+.course-hero-tutor {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.92rem;
+}
+
+.course-hero-tutor a {
+    color: var(--couleur-blanc);
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.course-hero-tutor a:hover {
+    border-bottom-color: var(--couleur-blanc);
+}
+
+/* Fil d'Ariane (sur fond sombre) */
 .breadcrumb-custom {
     display: flex;
     flex-wrap: wrap;
     list-style: none;
     padding: 0;
-    margin: 0 0 1rem;
+    margin: 0 0 1.5rem;
     font-size: 0.85rem;
-    color: var(--couleur-texte-att);
+    color: rgba(255, 255, 255, 0.55);
 }
 
 .breadcrumb-custom li + li::before {
     content: "/";
     margin: 0 0.6rem;
-    color: var(--couleur-bordure);
+    color: rgba(255, 255, 255, 0.3);
 }
 
 .breadcrumb-custom a:hover {
+    color: var(--couleur-blanc);
+}
+
+/* Contenu + colonne latérale */
+.course-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 2rem;
+    align-items: start;
+    padding-top: 2.5rem;
+}
+
+.course-main {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.panel {
+    background: var(--couleur-blanc);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    padding: 1.75rem 2rem;
+}
+
+.panel-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--couleur-secondaire);
+    margin-bottom: 0.25rem;
+}
+
+.panel-sub {
+    font-size: 0.88rem;
+    color: var(--couleur-texte-att);
+    margin-bottom: 1rem;
+}
+
+.panel-text {
+    margin: 0.75rem 0 0;
+}
+
+.panel-text i {
     color: var(--couleur-principale);
+    margin-right: 0.4rem;
 }
 
 /* Programme numéroté */
 .chapters {
     counter-reset: chapitre;
     list-style: none;
-    padding-left: 0 !important;
+    padding: 0;
+    margin: 0;
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-petit);
 }
 
 .chapters li {
     counter-increment: chapitre;
     display: flex;
     align-items: center;
-    gap: 0.9rem;
-    padding: 0.55rem 0;
-    margin: 0 !important;
+    gap: 1rem;
+    padding: 0.85rem 1.1rem;
     border-bottom: 1px solid var(--couleur-bordure);
+    font-weight: 500;
 }
 
 .chapters li:last-child {
@@ -593,13 +1409,14 @@ select:focus-visible {
 }
 
 .chapters li::before {
-    content: counter(chapitre);
+    content: counter(chapitre, decimal-leading-zero);
     flex-shrink: 0;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: rgba(22, 33, 62, 0.06);
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: var(--teinte);
     color: var(--couleur-principale);
+    font-family: var(--police-titres);
     font-size: 0.8rem;
     font-weight: 700;
     display: flex;
@@ -607,10 +1424,140 @@ select:focus-visible {
     justify-content: center;
 }
 
-.course-detail-actions {
+/* Ressources dans la page d'un cours */
+.resource-mini {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0;
+}
+
+.resource-mini li {
     display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--couleur-bordure);
+}
+
+.resource-mini li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.resource-mini-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--rayon-petit);
+    background: var(--teinte);
+    color: var(--couleur-principale);
+    flex-shrink: 0;
+}
+
+.resource-mini-text {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.resource-mini-text small {
+    color: var(--couleur-texte-att);
+}
+
+/* Bloc tuteur */
+.tutor-inline {
+    display: flex;
+    gap: 1.25rem;
+    margin-top: 1rem;
+}
+
+.tutor-inline-name {
+    font-family: var(--police-titres);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--couleur-secondaire);
+}
+
+.tutor-inline-name:hover {
+    color: var(--couleur-principale-clair);
+}
+
+.tutor-inline-subject {
+    font-size: 0.85rem;
+    color: var(--couleur-texte-att);
+    margin: 0.15rem 0 0.5rem;
+}
+
+.tutor-inline-bio {
+    margin: 0;
+    color: var(--couleur-texte);
+}
+
+/* Colonne latérale qui reste visible au défilement */
+.course-sidebar {
+    position: sticky;
+    top: 90px;
+    margin-top: -6.5rem;
+}
+
+.sidebar-card {
+    background: var(--couleur-blanc);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    box-shadow: var(--ombre);
+    overflow: hidden;
+}
+
+.sidebar-cover {
+    height: 150px;
+    font-size: 3rem;
+}
+
+.sidebar-body {
+    padding: 1.5rem;
+}
+
+.sidebar-price {
+    font-family: var(--police-titres);
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--couleur-secondaire);
+    margin-bottom: 1rem;
+}
+
+.sidebar-list {
+    list-style: none;
+    padding: 0;
+    margin: 1.25rem 0 0;
+    font-size: 0.9rem;
+}
+
+.sidebar-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--couleur-bordure);
+}
+
+.sidebar-list li:last-child {
+    border-bottom: none;
+}
+
+.sidebar-list span {
+    color: var(--couleur-texte-att);
+}
+
+.sidebar-list i {
+    width: 1.2rem;
+    margin-right: 0.35rem;
+    color: var(--couleur-principale);
+}
+
+.sidebar-list strong {
+    color: var(--couleur-secondaire);
+    font-weight: 600;
 }
 
 /* Cours précédent / suivant */
@@ -618,6 +1565,7 @@ select:focus-visible {
     display: flex;
     justify-content: space-between;
     gap: 1rem;
+    margin-top: 2.5rem;
 }
 
 .course-pager a {
@@ -625,14 +1573,16 @@ select:focus-visible {
     background: var(--couleur-blanc);
     border: 1px solid var(--couleur-bordure);
     border-radius: var(--rayon-bordure);
-    padding: 1rem 1.25rem;
-    font-weight: 600;
+    padding: 1.1rem 1.4rem;
+    font-family: var(--police-titres);
+    font-weight: 700;
     color: var(--couleur-secondaire);
     transition: var(--transition);
 }
 
 .course-pager a:hover {
     border-color: var(--couleur-principale-clair);
+    box-shadow: var(--ombre-legere);
 }
 
 .course-pager a.next {
@@ -642,112 +1592,120 @@ select:focus-visible {
 
 .course-pager span {
     display: block;
+    font-family: var(--police-texte);
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
     color: var(--couleur-texte-att);
-}
-
-.course-detail-section {
-    margin-bottom: 2rem;
-}
-
-.course-detail-section h2 {
-    color: var(--couleur-principale);
-    margin-bottom: 1rem;
-    font-size: 1.05rem;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-}
-
-.course-detail-section ul {
-    padding-left: 1.4rem;
-}
-
-.course-detail-section li {
-    margin-bottom: 0.5rem;
-}
-
-.course-detail-section li::marker {
-    color: var(--couleur-principale);
+    margin-bottom: 0.2rem;
 }
 
 /* -----------------------------------------------------
-   CARTES TUTEURS
+   10. TUTEURS
    ----------------------------------------------------- */
+.tutors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
 .tutor-card {
+    display: flex;
+    flex-direction: column;
     background: var(--couleur-blanc);
     border: 1px solid var(--couleur-bordure);
     border-radius: var(--rayon-bordure);
-    padding: 2.2rem 1.75rem;
-    text-align: center;
+    padding: 1.75rem;
     transition: var(--transition);
-    height: 100%;
+    scroll-margin-top: 6rem;
 }
 
 .tutor-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 28px var(--couleur-ombre);
-    border-color: var(--couleur-principale-clair);
+    box-shadow: var(--ombre);
+    border-color: transparent;
 }
 
-.tutor-avatar {
-    width: 84px;
-    height: 84px;
-    border-radius: 50%;
-    background: var(--couleur-principale);
+/* Ancre #tuteur-N : met en évidence le tuteur ciblé depuis une page de cours */
+.tutor-card:target {
+    border-color: var(--couleur-principale);
+    box-shadow: 0 0 0 4px var(--teinte-forte);
+}
+
+.tutor-top {
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.1rem;
-    font-size: 1.9rem;
-    color: var(--couleur-blanc);
+    gap: 1rem;
+    margin-bottom: 1rem;
 }
 
 .tutor-name {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     font-weight: 700;
     color: var(--couleur-secondaire);
-    margin-bottom: 0.3rem;
+    margin: 0;
 }
 
 .tutor-subject {
-    color: var(--couleur-principale);
+    display: inline-block;
+    margin: 0.3rem 0 0;
     font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-bottom: 0.9rem;
+    font-weight: 600;
+    color: var(--couleur-principale);
+    background: var(--teinte);
+    padding: 0.15rem 0.55rem;
+    border-radius: 6px;
+}
+
+.tutor-rating {
+    font-size: 0.9rem;
+    color: var(--couleur-secondaire);
+    margin-bottom: 0.75rem;
 }
 
 .tutor-bio {
     color: var(--couleur-texte-att);
-    font-size: 0.85rem;
-    margin-bottom: 1rem;
-}
-
-.tutor-rating {
-    color: var(--couleur-principale);
-    font-size: 0.85rem;
+    font-size: 0.92rem;
+    flex-grow: 1;
 }
 
 .tutor-stats {
-    margin: 0.8rem 0 0;
-    font-size: 0.85rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin: 0.25rem 0 1.25rem;
+}
+
+.tutor-stats div {
+    background: var(--couleur-fond);
+    border-radius: var(--rayon-petit);
+    padding: 0.6rem 0.9rem;
+}
+
+.tutor-stats dt {
+    font-size: 0.75rem;
+    font-weight: 500;
     color: var(--couleur-texte-att);
+}
+
+.tutor-stats dd {
+    margin: 0;
+    font-family: var(--police-titres);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--couleur-secondaire);
 }
 
 .tutor-courses {
     list-style: none;
     padding: 1rem 0 0;
-    margin: 1rem 0 0;
+    margin: 0;
     border-top: 1px solid var(--couleur-bordure);
-    font-size: 0.85rem;
+    font-size: 0.88rem;
 }
 
 .tutor-courses li + li {
-    margin-top: 0.35rem;
+    margin-top: 0.5rem;
 }
 
 .tutor-courses a {
@@ -755,174 +1713,187 @@ select:focus-visible {
     font-weight: 600;
 }
 
+.tutor-courses a i {
+    margin-right: 0.35rem;
+    opacity: 0.6;
+}
+
 .tutor-courses a:hover {
+    color: var(--couleur-principale-clair);
     text-decoration: underline;
 }
 
 .tutor-courses-empty {
     padding-top: 1rem;
-    margin: 1rem 0 0;
+    margin: 0;
     border-top: 1px solid var(--couleur-bordure);
-    font-size: 0.85rem;
+    font-size: 0.88rem;
     font-style: italic;
     color: var(--couleur-texte-att);
 }
 
-/* Ancre #tuteur-N : met en évidence le tuteur ciblé depuis une page de cours */
-.tutor-card:target {
-    border-color: var(--couleur-principale);
-    box-shadow: 0 0 0 3px rgba(22, 33, 62, 0.12);
-}
-
-.tutor-card {
-    scroll-margin-top: 6rem;
-}
-
-/* Bandeau d'appel à l'action */
-.cta-banner {
-    background: linear-gradient(160deg, var(--couleur-principale), var(--couleur-secondaire));
-    color: var(--couleur-blanc);
-    border-radius: var(--rayon-bordure);
-    padding: 3rem 1.5rem;
-    margin-top: 3rem;
-    text-align: center;
-}
-
-.cta-banner h2 {
-    font-size: 1.4rem;
-    font-weight: 700;
-    margin-bottom: 0.6rem;
-}
-
-.cta-banner p {
-    color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 1.5rem;
-}
-
-.tutors-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 1.5rem;
-    padding: 2rem 0;
-}
-
 /* -----------------------------------------------------
-   RESSOURCES TÉLÉCHARGEABLES
+   11. RESSOURCES
    ----------------------------------------------------- */
+.resource-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
 .resource-item {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
     background: var(--couleur-blanc);
     border: 1px solid var(--couleur-bordure);
     border-radius: var(--rayon-bordure);
-    padding: 1.4rem 1.6rem;
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
+    padding: 1.25rem 1.5rem;
     transition: var(--transition);
-    margin-bottom: 1rem;
 }
 
 .resource-item:hover {
+    box-shadow: var(--ombre-legere);
     border-color: var(--couleur-principale-clair);
-    box-shadow: 0 8px 20px var(--couleur-ombre);
 }
 
 .resource-icon {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    background: var(--couleur-principale);
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.25rem;
-    color: var(--couleur-blanc);
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background: var(--teinte);
+    color: var(--couleur-principale);
+    font-size: 1.3rem;
     flex-shrink: 0;
 }
 
 .resource-info {
     flex-grow: 1;
+    min-width: 0;
 }
 
 .resource-title {
-    font-size: 1rem;
+    font-size: 1.02rem;
     font-weight: 700;
     color: var(--couleur-secondaire);
-    margin-bottom: 0.3rem;
+    margin: 0 0 0.15rem;
+}
+
+.resource-desc {
+    font-size: 0.9rem;
+    color: var(--couleur-texte-att);
+    margin: 0 0 0.5rem;
 }
 
 .resource-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 1rem;
     font-size: 0.8rem;
     color: var(--couleur-texte-att);
 }
 
-.resource-btn {
-    background: var(--couleur-principale);
-    color: var(--couleur-blanc);
-    padding: 0.55rem 1.3rem;
-    border-radius: 50px;
-    font-size: 0.8rem;
+.resource-meta a {
+    color: var(--couleur-principale);
     font-weight: 600;
-    border: none;
-    cursor: pointer;
-    transition: var(--transition);
-    flex-shrink: 0;
-    display: inline-block;
 }
 
-.resource-btn:hover {
-    background: var(--couleur-secondaire);
+.resource-meta a:hover {
+    text-decoration: underline;
+}
+
+.resource-btn {
+    flex-shrink: 0;
+    padding: 0.65rem 1.2rem;
+    font-size: 0.85rem;
 }
 
 /* Ressource fictive : pas encore de fichier (colonne fichier = NULL) */
-.resource-btn-disabled {
-    background: var(--couleur-bordure);
+.resource-btn-disabled,
+.resource-btn-disabled:hover {
+    background: var(--couleur-fond);
+    border-color: var(--couleur-bordure);
     color: var(--couleur-texte-att);
     cursor: not-allowed;
 }
 
-.resource-btn-disabled:hover {
-    background: var(--couleur-bordure);
-    color: var(--couleur-texte-att);
-}
-
-.resource-btn:not(.resource-btn-disabled):hover {
-    color: var(--couleur-blanc);
-}
-
 .resources-note {
-    text-align: center;
     margin-top: 1.5rem;
     font-size: 0.85rem;
     color: var(--couleur-texte-att);
 }
 
 /* -----------------------------------------------------
-   FAQ (accordéon natif <details>)
+   12. FAQ, CONTACT, FORMULAIRES
    ----------------------------------------------------- */
-.faq-list {
-    max-width: 760px;
-    margin: 0 auto;
+
+/* Mise en page deux colonnes : bloc d'infos à gauche, contenu à droite */
+.split-layout {
+    display: grid;
+    grid-template-columns: 340px minmax(0, 1fr);
+    gap: 2.5rem;
+    align-items: start;
 }
 
+.help-card {
+    background: var(--couleur-blanc);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    padding: 2rem;
+}
+
+.help-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background: var(--couleur-principale);
+    color: var(--couleur-blanc);
+    font-size: 1.2rem;
+    margin-bottom: 1.25rem;
+}
+
+.help-card h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--couleur-secondaire);
+}
+
+.help-card p {
+    color: var(--couleur-texte-att);
+    font-size: 0.92rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Accordéon natif <details> */
 .faq-item {
     background: var(--couleur-blanc);
     border: 1px solid var(--couleur-bordure);
     border-radius: var(--rayon-bordure);
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.75rem;
     transition: var(--transition);
 }
 
 .faq-item[open] {
     border-color: var(--couleur-principale-clair);
+    box-shadow: var(--ombre-legere);
 }
 
 .faq-item summary {
     list-style: none;
     cursor: pointer;
-    padding: 1.1rem 3rem 1.1rem 1.4rem;
+    padding: 1.15rem 3.5rem 1.15rem 1.5rem;
+    font-family: var(--police-titres);
     font-weight: 700;
     color: var(--couleur-secondaire);
     position: relative;
+    border-radius: var(--rayon-bordure);
 }
 
 .faq-item summary::-webkit-details-marker {
@@ -932,132 +1903,234 @@ select:focus-visible {
 .faq-item summary::after {
     content: "+";
     position: absolute;
-    right: 1.4rem;
+    right: 1.25rem;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 1.3rem;
-    font-weight: 400;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--teinte);
     color: var(--couleur-principale);
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 28px;
+    text-align: center;
 }
 
 .faq-item[open] summary::after {
     content: "−";
+    background: var(--couleur-principale);
+    color: var(--couleur-blanc);
 }
 
 .faq-item p {
-    padding: 0 1.4rem 1.2rem;
+    padding: 0 1.5rem 1.25rem;
     margin: 0;
     color: var(--couleur-texte-att);
 }
 
-/* -----------------------------------------------------
-   ÉTAPES (« Comment ça marche », « Devenir tuteur »)
-   ----------------------------------------------------- */
-.steps {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.5rem;
-    list-style: none;
-    padding: 0;
-    margin: 0;
+/* Infos de contact */
+.contact-aside {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
-.step {
+.contact-info {
+    display: flex;
+    gap: 1rem;
     background: var(--couleur-blanc);
     border: 1px solid var(--couleur-bordure);
     border-radius: var(--rayon-bordure);
-    padding: 2rem 1.5rem;
-    text-align: center;
+    padding: 1.25rem 1.4rem;
 }
 
-.step-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: rgba(22, 33, 62, 0.06);
-    color: var(--couleur-principale);
-    display: flex;
+.contact-info-icon {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.3rem;
-    margin: 0 auto 1rem;
-}
-
-.step h3 {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--couleur-secondaire);
-    margin-bottom: 0.5rem;
-}
-
-.step p {
-    font-size: 0.9rem;
-    color: var(--couleur-texte-att);
-    margin: 0;
-}
-
-/* -----------------------------------------------------
-   MESSAGE DE CONFIRMATION (après l'envoi d'un formulaire)
-   ----------------------------------------------------- */
-.flash-message {
-    background: var(--couleur-blanc);
-    border: 1px solid var(--couleur-bordure);
-    border-left: 4px solid var(--couleur-principale);
-    border-radius: 10px;
-    padding: 1rem 1.25rem;
-    color: var(--couleur-secondaire);
-    font-weight: 600;
-}
-
-/* -----------------------------------------------------
-   INFOS DE CONTACT
-   ----------------------------------------------------- */
-.contact-info-icon {
-    font-size: 2rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--teinte);
     color: var(--couleur-principale);
-    margin-bottom: 0.5rem;
+    flex-shrink: 0;
 }
 
 .contact-info-title {
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     font-weight: 700;
+    color: var(--couleur-secondaire);
+    margin: 0 0 0.15rem;
+}
+
+.contact-info p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--couleur-texte-att);
+}
+
+/* Colonne « Devenir tuteur » */
+.aside-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--couleur-secondaire);
+    margin-bottom: 1rem;
+}
+
+.benefits {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2.25rem;
+}
+
+.benefits li {
+    display: flex;
+    gap: 0.85rem;
+    margin-bottom: 0.9rem;
+    color: var(--couleur-texte);
+    font-size: 0.95rem;
+}
+
+.benefits i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: var(--teinte);
+    color: var(--couleur-principale);
+    flex-shrink: 0;
+}
+
+/* Frise verticale numérotée */
+.timeline {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: etape;
+}
+
+.timeline li {
+    counter-increment: etape;
+    position: relative;
+    padding: 0 0 1.5rem 3rem;
+}
+
+.timeline li::before {
+    content: counter(etape);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--couleur-principale);
+    color: var(--couleur-blanc);
+    font-family: var(--police-titres);
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.timeline li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: 15.5px;
+    top: 36px;
+    bottom: 4px;
+    width: 1px;
+    background: var(--couleur-bordure);
+}
+
+.timeline strong {
+    display: block;
     color: var(--couleur-secondaire);
 }
 
-/* -----------------------------------------------------
-   FORMULAIRES (contact, devenir tuteur)
-   ----------------------------------------------------- */
-.contact-form {
+.timeline span {
+    font-size: 0.9rem;
+    color: var(--couleur-texte-att);
+}
+
+/* Carte de formulaire */
+.form-card {
     background: var(--couleur-blanc);
     border: 1px solid var(--couleur-bordure);
     border-radius: var(--rayon-bordure);
-    padding: 2.5rem;
-    max-width: 600px;
-    margin: 0 auto;
+    box-shadow: var(--ombre-legere);
+    padding: 2.25rem;
+}
+
+.form-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--couleur-secondaire);
+    margin-bottom: 1.25rem;
+}
+
+.form-note {
+    display: flex;
+    gap: 0.6rem;
+    background: var(--teinte-legere);
+    color: var(--couleur-texte);
+    padding: 0.9rem 1.1rem;
+    border-radius: var(--rayon-petit);
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+    border: 1px solid var(--teinte);
+}
+
+.form-note i {
+    color: var(--couleur-principale);
+    margin-top: 0.2rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
 }
 
 .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
 }
 
 .form-group label {
     display: block;
-    font-weight: 700;
-    font-size: 0.78rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    font-weight: 600;
+    font-size: 0.85rem;
     color: var(--couleur-secondaire);
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.45rem;
+}
+
+/* Champ avec icône discrète à l'intérieur, à gauche */
+.form-icon-group {
+    position: relative;
+}
+
+.form-icon-group .form-icon {
+    position: absolute;
+    left: 1rem;
+    top: 0.85rem;
+    color: var(--couleur-texte-att);
+    font-size: 0.9rem;
+    pointer-events: none;
+    transition: var(--transition);
 }
 
 .form-group input,
 .form-group textarea,
 .form-group select {
     width: 100%;
-    padding: 0.8rem 1rem;
+    padding: 0.75rem 1rem 0.75rem 2.75rem;
     border: 1px solid var(--couleur-bordure);
-    border-radius: 10px;
-    font-size: 1rem;
+    border-radius: var(--rayon-petit);
+    background-color: var(--couleur-fond);
+    font-size: 0.95rem;
     font-family: inherit;
     color: var(--couleur-texte);
     transition: var(--transition);
@@ -1067,43 +2140,23 @@ select:focus-visible {
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
+    background-color: var(--couleur-blanc);
     border-color: var(--couleur-principale);
-    box-shadow: 0 0 0 3px rgba(22, 33, 62, 0.08);
+    box-shadow: 0 0 0 4px var(--teinte);
+}
+
+.form-icon-group:focus-within .form-icon {
+    color: var(--couleur-principale);
+}
+
+.form-group input,
+.form-group select {
+    height: 50px;
 }
 
 .form-group textarea {
-    min-height: 140px;
+    min-height: 150px;
     resize: vertical;
-}
-
-/* Pastille d'icône accolée au champ, inspirée d'un formulaire de
-   connexion classique : icône pleine à gauche, champ à droite. */
-.form-icon-group {
-    display: flex;
-    align-items: stretch;
-}
-
-.form-icon-group .form-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 46px;
-    flex-shrink: 0;
-    background: var(--couleur-principale);
-    color: var(--couleur-blanc);
-    border-radius: 10px 0 0 10px;
-    font-size: 0.95rem;
-}
-
-.form-icon-group input,
-.form-icon-group select {
-    border-radius: 0 10px 10px 0;
-    border-left: none;
-}
-
-.form-icon-group textarea {
-    border-radius: 0 10px 10px 0;
-    border-left: none;
 }
 
 /* Champ en erreur : invalide côté navigateur (après saisie)
@@ -1112,6 +2165,7 @@ select:focus-visible {
 .form-group textarea:invalid:not(:placeholder-shown),
 .form-group [aria-invalid="true"] {
     border-color: var(--couleur-erreur);
+    background-color: var(--couleur-blanc);
 }
 
 .form-error {
@@ -1120,147 +2174,89 @@ select:focus-visible {
     margin: 0.4rem 0 0;
 }
 
-.form-title {
-    color: var(--couleur-secondaire);
-    font-size: 1.1rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 1.5rem;
-    text-align: center;
-}
-
-.form-note {
-    background: rgba(22, 33, 62, 0.05);
-    color: var(--couleur-secondaire);
-    padding: 1rem 1.2rem;
-    border-radius: 10px;
-    margin-bottom: 1.5rem;
-    font-size: 0.85rem;
-    border: 1px solid rgba(22, 33, 62, 0.08);
-}
-
-.form-note code {
-    color: var(--couleur-principale);
-    font-weight: 600;
-}
-
 .btn-submit {
-    background: var(--couleur-principale);
-    color: white;
-    padding: 0.85rem 2.5rem;
-    border: none;
-    border-radius: 50px;
+    padding: 0.95rem;
     font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-    width: 100%;
-}
-
-.btn-submit:hover {
-    background: var(--couleur-secondaire);
-    transform: translateY(-2px);
+    margin-top: 0.5rem;
 }
 
 /* -----------------------------------------------------
-   FOOTER
+   13. PIED DE PAGE
    ----------------------------------------------------- */
-.footer {
+.site-footer {
     background: var(--couleur-secondaire);
-    color: var(--couleur-blanc);
-    padding: 3rem 0 1.5rem;
-    margin-top: 4rem;
-}
-
-.footer-title {
-    font-weight: 700;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 1rem;
-}
-
-.footer p {
     color: rgba(255, 255, 255, 0.6);
+    padding: 4rem 0 1.75rem;
+    margin-top: 5rem;
     font-size: 0.9rem;
 }
 
-.footer a {
-    color: rgba(255, 255, 255, 0.6);
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1.4fr;
+    gap: 2.5rem;
+}
+
+.footer-about p {
+    margin: 1rem 0 0;
+    max-width: 300px;
+}
+
+.footer-title {
+    font-family: var(--police-texte);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--couleur-blanc);
+    margin-bottom: 1rem;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li + li {
+    margin-top: 0.55rem;
+}
+
+.footer-links a {
     transition: var(--transition);
 }
 
-.footer a:hover {
+.footer-links a:hover {
     color: var(--couleur-blanc);
 }
 
+.footer-contact i {
+    width: 1.2rem;
+    margin-right: 0.35rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
 .footer-bottom {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     padding-top: 1.5rem;
-    margin-top: 2rem;
-    text-align: center;
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.45);
+    margin-top: 3rem;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.footer-bottom p {
+    margin: 0;
 }
 
 /* -----------------------------------------------------
-   TITRES DE SECTION
+   14. RESPONSIVE
    ----------------------------------------------------- */
-.section-title {
-    text-align: center;
-    margin-bottom: 2.5rem;
-}
 
-.section-title h2 {
-    color: var(--couleur-secondaire);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-size: 1.4rem;
-    margin-bottom: 0.6rem;
-}
-
-.section-title p {
-    color: var(--couleur-texte-att);
-    max-width: 500px;
-    margin: 0 auto;
-    font-size: 0.95rem;
-}
-
-/* -----------------------------------------------------
-   STATISTIQUES (Page d'accueil)
-   ----------------------------------------------------- */
-.stats-section {
-    background: var(--couleur-blanc);
-    padding: 3rem 0;
-    margin: 3rem 0;
-    border-top: 1px solid var(--couleur-bordure);
-    border-bottom: 1px solid var(--couleur-bordure);
-}
-
-.stat-item {
-    text-align: center;
-    padding: 1rem;
-}
-
-.stat-number {
-    font-size: 2.3rem;
-    font-weight: 700;
-    color: var(--couleur-principale);
-}
-
-.stat-label {
-    color: var(--couleur-texte-att);
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-}
-
-/* -----------------------------------------------------
-   RESPONSIVE
-   ----------------------------------------------------- */
-/* Menu replié en dessous de 992px : le label ☰ affiche/masque la liste */
+/* Tablette et menu replié en dessous de 992px */
 @media (max-width: 991px) {
     .menu-btn {
         display: block;
@@ -1271,37 +2267,110 @@ select:focus-visible {
         display: none;
         flex-direction: column;
         align-items: stretch;
+        gap: 0.25rem;
         width: 100%;
-        margin-top: 0.75rem;
+        padding: 0.75rem 0 1rem;
     }
 
     .menu-toggle:checked ~ .nav-menu {
         display: flex;
     }
 
-    .nav-link {
-        border-bottom: none;
-        border-left: 2px solid transparent;
-    }
-
-    .nav-link:hover,
-    .nav-link.active {
-        border-left-color: var(--couleur-principale);
-    }
-
     .nav-cta {
         margin: 0.5rem 0 0;
         text-align: center;
+        padding: 0.75rem;
+    }
+
+    .hero {
+        padding: 4rem 0 6rem;
+    }
+
+    .hero-grid,
+    .course-layout,
+    .split-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-visual {
+        display: none;
+    }
+
+    .stats-card {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stat:nth-child(3) {
+        border-left: none;
+    }
+
+    .stat:nth-child(n+3) {
+        border-top: 1px solid var(--couleur-bordure);
+    }
+
+    .course-sidebar {
+        position: static;
+        margin-top: 0;
+        order: -1;
+    }
+
+    .sidebar-cover {
+        display: none;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
     }
 }
 
+/* Mobile */
 @media (max-width: 768px) {
-    .hero h1 {
-        font-size: 1.9rem;
+    .section {
+        padding-top: 3.25rem;
     }
 
-    .hero p {
-        font-size: 1rem;
+    .section-white {
+        margin-top: 3.25rem;
+        padding-bottom: 3.25rem;
+    }
+
+    .section-head-split {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .hero-actions > a {
+        flex: 1 1 100%;
+    }
+
+    .stat {
+        padding: 1.1rem;
+        gap: 0.75rem;
+    }
+
+    .stat-icon {
+        width: 38px;
+        height: 38px;
+        font-size: 0.95rem;
+    }
+
+    .stat-number {
+        font-size: 1.35rem;
+    }
+
+    .steps {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .step:not(:last-child)::after {
+        display: none;
+    }
+
+    .cta-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 2rem 1.5rem;
     }
 
     .courses-grid,
@@ -1309,14 +2378,30 @@ select:focus-visible {
         grid-template-columns: 1fr;
     }
 
-    .resource-item {
-        flex-direction: column;
-        text-align: center;
+    .filter-select {
+        flex: 1 1 40%;
     }
 
-    .contact-form,
-    .course-detail {
+    .btn-filter {
+        width: 100%;
+    }
+
+    .panel,
+    .form-card {
         padding: 1.5rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .resource-item {
+        flex-wrap: wrap;
+    }
+
+    .resource-btn {
+        width: 100%;
     }
 
     .course-pager {
@@ -1331,29 +2416,8 @@ select:focus-visible {
         margin-left: 0;
     }
 
-    .btn-filter {
-        width: 100%;
-    }
-
-    .course-filters > div:not(.filter-search) {
-        flex: 1 1 45%;
-    }
-
-    .form-icon-group {
-        flex-direction: column;
-    }
-
-    .form-icon-group .form-icon {
-        width: 100%;
-        border-radius: 10px 10px 0 0;
-        padding: 0.5rem;
-    }
-
-    .form-icon-group input,
-    .form-icon-group select,
-    .form-icon-group textarea {
-        border-radius: 0 0 10px 10px;
-        border-left: 1px solid var(--couleur-bordure);
-        border-top: none;
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
     }
 }

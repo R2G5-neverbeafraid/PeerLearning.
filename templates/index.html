@@ -1,80 +1,152 @@
 {% extends "base.html" %}
-{% from "macros.html" import carte_cours %}
+{% from "macros.html" import carte_cours, initiales, section_head %}
 
 {% block title %}Apprenez ensemble{% endblock %}
 
 {% block content %}
-    <!-- HERO -->
+    <!-- HERO : texte à gauche, aperçu du cours le plus suivi à droite -->
     <section class="hero">
-        <div class="container">
-            <h1><i class="fas fa-graduation-cap" aria-hidden="true"></i> Peer Learning</h1>
-            <p>La plateforme d'apprentissage collaboratif pour étudiants. Apprenez, partagez, progressez ensemble.</p>
-            <div class="hero-actions">
-                <a href="{{ url_for('courses') }}" class="btn-primary-custom">Découvrir les cours</a>
-                <a href="{{ url_for('become_tutor') }}" class="btn-outline-custom">Devenir tuteur</a>
+        <div class="container hero-grid">
+            <div class="hero-text">
+                <p class="hero-eyebrow"><i class="fas fa-users" aria-hidden="true"></i> Apprentissage entre étudiants</p>
+                <h1>Apprenez mieux, <span>ensemble.</span></h1>
+                <p class="hero-lead">Des cours créés par des étudiants pour des étudiants. Choisissez une matière, suivez un tuteur et progressez à votre rythme.</p>
+                <div class="hero-actions">
+                    <a href="{{ url_for('courses') }}" class="btn-primary-custom">Découvrir les cours <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                    <a href="{{ url_for('become_tutor') }}" class="btn-outline-custom">Devenir tuteur</a>
+                </div>
+                <ul class="hero-points">
+                    <li><i class="fas fa-check" aria-hidden="true"></i> 100 % gratuit</li>
+                    <li><i class="fas fa-check" aria-hidden="true"></i> Tuteurs étudiants</li>
+                    <li><i class="fas fa-check" aria-hidden="true"></i> À votre rythme</li>
+                </ul>
             </div>
+
+            {% if populaires %}
+            {% set vedette = populaires[0] %}
+            <div class="hero-visual" aria-hidden="true">
+                <div class="preview-card">
+                    <div class="preview-head">
+                        <span class="preview-icon"><i class="fas {{ vedette.icone }}"></i></span>
+                        <div>
+                            <p class="preview-cat">{{ vedette.categorie }}</p>
+                            <p class="preview-title">{{ vedette.titre }}</p>
+                        </div>
+                    </div>
+                    <div class="preview-progress">
+                        <div class="preview-progress-label"><span>Progression</span><span>2 / {{ chapitres_vedette | length }} chapitres</span></div>
+                        <div class="progress-track"><span></span></div>
+                    </div>
+                    <ul class="preview-chapters">
+                        {% for ch in chapitres_vedette %}
+                        <li class="{{ 'done' if loop.index <= 2 else 'current' if loop.index == 3 }}">
+                            <i class="fas {{ 'fa-check' if loop.index <= 2 else 'fa-play' if loop.index == 3 else 'fa-lock' }}"></i>
+                            {{ ch.titre }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="preview-footer">
+                        <span class="avatar avatar-sm">{{ initiales(vedette.tuteur) }}</span>
+                        <span>{{ vedette.tuteur }}</span>
+                        <span class="preview-rating"><i class="fas fa-star"></i> {{ vedette.note }}</span>
+                    </div>
+                </div>
+                <div class="preview-badge">
+                    <span class="preview-badge-icon"><i class="fas fa-user-graduate"></i></span>
+                    <div><strong>{{ stats.nb_etudiants }}</strong><span>étudiants inscrits</span></div>
+                </div>
+            </div>
+            {% endif %}
         </div>
     </section>
 
     <!-- STATISTIQUES : calculées en SQL (COUNT, SUM) -->
-    <section class="stats-section">
-        <div class="container">
-            <div class="row">
-                {% for nombre, libelle in [
-                    (stats.nb_cours, 'Cours disponibles'),
-                    (stats.nb_tuteurs, 'Tuteurs passionnés'),
-                    (stats.nb_etudiants, 'Étudiants inscrits'),
-                    (stats.nb_ressources, 'Ressources gratuites'),
-                ] %}
-                <div class="col-md-3 col-6">
-                    <div class="stat-item">
-                        <div class="stat-number">{{ nombre }}</div>
-                        <div class="stat-label">{{ libelle }}</div>
-                    </div>
+    <section class="container">
+        <div class="stats-card">
+            {% for nombre, libelle, icone in [
+                (stats.nb_cours, 'Cours disponibles', 'fa-book-open'),
+                (stats.nb_tuteurs, 'Tuteurs passionnés', 'fa-chalkboard-teacher'),
+                (stats.nb_etudiants, 'Étudiants inscrits', 'fa-user-graduate'),
+                (stats.nb_ressources, 'Ressources gratuites', 'fa-folder-open'),
+            ] %}
+            <div class="stat">
+                <span class="stat-icon"><i class="fas {{ icone }}" aria-hidden="true"></i></span>
+                <div>
+                    <div class="stat-number">{{ nombre }}</div>
+                    <div class="stat-label">{{ libelle }}</div>
                 </div>
-                {% endfor %}
             </div>
+            {% endfor %}
         </div>
     </section>
 
-    <!-- COMMENT ÇA MARCHE -->
-    <section class="container my-5">
-        <div class="section-title">
-            <h2>Comment ça marche ?</h2>
-            <p>Trois étapes pour apprendre avec vos pairs</p>
+    <!-- MATIÈRES -->
+    <section class="container section">
+        {{ section_head('Matières', 'Explorer par matière', 'Trouvez rapidement les cours qui correspondent à votre filière.') }}
+        <div class="subjects-grid">
+            {% set icones = {'Informatique': 'fa-laptop-code', 'Mathématiques': 'fa-square-root-alt'} %}
+            {% for cat in categories %}
+            <a class="subject-card" href="{{ url_for('courses', categorie=cat.nom) }}">
+                <span class="subject-icon"><i class="fas {{ icones.get(cat.nom, 'fa-book') }}" aria-hidden="true"></i></span>
+                <span class="subject-text">
+                    <strong>{{ cat.nom }}</strong>
+                    <small>{{ cat.nb_cours }} cours</small>
+                </span>
+                <i class="fas fa-arrow-right subject-arrow" aria-hidden="true"></i>
+            </a>
+            {% endfor %}
+            <a class="subject-card subject-card-dashed" href="{{ url_for('become_tutor') }}">
+                <span class="subject-icon"><i class="fas fa-plus" aria-hidden="true"></i></span>
+                <span class="subject-text">
+                    <strong>Votre matière ?</strong>
+                    <small>Proposez un cours</small>
+                </span>
+                <i class="fas fa-arrow-right subject-arrow" aria-hidden="true"></i>
+            </a>
         </div>
-        <ol class="steps">
-            <li class="step">
-                <div class="step-icon"><i class="fas fa-search" aria-hidden="true"></i></div>
-                <h3>1. Choisissez un cours</h3>
-                <p>Parcourez le catalogue et filtrez par matière ou par niveau.</p>
-            </li>
-            <li class="step">
-                <div class="step-icon"><i class="fas fa-user-friends" aria-hidden="true"></i></div>
-                <h3>2. Apprenez avec un tuteur</h3>
-                <p>Un étudiant plus avancé vous explique la matière avec ses mots.</p>
-            </li>
-            <li class="step">
-                <div class="step-icon"><i class="fas fa-hands-helping" aria-hidden="true"></i></div>
-                <h3>3. Transmettez à votre tour</h3>
-                <p>Une fois à l'aise, devenez tuteur et aidez les suivants.</p>
-            </li>
-        </ol>
     </section>
 
     <!-- COURS POPULAIRES : ORDER BY nb_etudiants DESC LIMIT 3 -->
-    <section class="container my-5">
-        <div class="section-title">
-            <h2>Cours les plus populaires</h2>
-            <p>Découvrez les cours préférés de nos étudiants</p>
-        </div>
+    <section class="container section">
+        {{ section_head('Populaires', 'Les cours les plus suivis', 'Les cours préférés de nos étudiants ce semestre.', url_for('courses'), 'Voir tous les cours') }}
         <div class="courses-grid">
             {% for c in populaires %}
             {{ carte_cours(c) }}
             {% endfor %}
         </div>
-        <div class="text-center mt-4">
-            <a href="{{ url_for('courses') }}" class="btn-dark-custom">Voir tous les cours</a>
+    </section>
+
+    <!-- COMMENT ÇA MARCHE -->
+    <section class="section section-white">
+        <div class="container">
+            {{ section_head('Le principe', 'Comment ça marche ?', 'Trois étapes pour apprendre avec vos pairs.') }}
+            <ol class="steps">
+                <li class="step">
+                    <span class="step-number">1</span>
+                    <h3>Choisissez un cours</h3>
+                    <p>Parcourez le catalogue et filtrez par matière ou par niveau.</p>
+                </li>
+                <li class="step">
+                    <span class="step-number">2</span>
+                    <h3>Apprenez avec un tuteur</h3>
+                    <p>Un étudiant plus avancé vous explique la matière avec ses mots.</p>
+                </li>
+                <li class="step">
+                    <span class="step-number">3</span>
+                    <h3>Transmettez à votre tour</h3>
+                    <p>Une fois à l'aise, devenez tuteur et aidez les suivants.</p>
+                </li>
+            </ol>
+        </div>
+    </section>
+
+    <section class="container section">
+        <div class="cta-banner">
+            <div>
+                <h2>Vous maîtrisez une matière ?</h2>
+                <p>Rejoignez l'équipe de tuteurs et aidez d'autres étudiants à réussir.</p>
+            </div>
+            <a href="{{ url_for('become_tutor') }}" class="btn-primary-custom">Devenir tuteur <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
         </div>
     </section>
 {% endblock %}

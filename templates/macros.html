@@ -16,38 +16,73 @@
 </span>
 {%- endmacro %}
 
+{# Initiales d'un nom : "Marie Makasa" -> "MM" #}
+{% macro initiales(nom) -%}
+{%- for mot in nom.split() -%}{{ mot[0] }}{%- endfor -%}
+{%- endmacro %}
+
+{# Niveau sous forme de barres (1, 2 ou 3 barres pleines) #}
+{% macro niveau_barres(niveau, clair=false) -%}
+{% set n = {'Débutant': 1, 'Intermédiaire': 2, 'Avancé': 3}.get(niveau, 1) %}
+<span class="level level-{{ n }}{% if clair %} level-light{% endif %}">
+    <span class="level-bars" aria-hidden="true"><i></i><i></i><i></i></span>{{ niveau }}
+</span>
+{%- endmacro %}
+
 {# En-tête des pages secondaires #}
-{% macro page_header(icone, titre, sous_titre) -%}
+{% macro page_header(surtitre, titre, sous_titre) -%}
 <section class="page-header">
     <div class="container">
-        <h1><i class="fas {{ icone }}" aria-hidden="true"></i> {{ titre }}</h1>
-        <p>{{ sous_titre }}</p>
+        <p class="eyebrow eyebrow-light">{{ surtitre }}</p>
+        <h1>{{ titre }}</h1>
+        <p class="page-header-lead">{{ sous_titre }}</p>
     </div>
 </section>
 {%- endmacro %}
 
-{# Carte d'un cours (catalogue, accueil, cours similaires) #}
+{# Titre de section : surtitre + titre + texte, avec un lien optionnel à droite #}
+{% macro section_head(surtitre, titre, sous_titre='', lien=none, lien_texte='') -%}
+<div class="section-head{% if lien %} section-head-split{% endif %}">
+    <div>
+        <p class="eyebrow">{{ surtitre }}</p>
+        <h2>{{ titre }}</h2>
+        {% if sous_titre %}<p>{{ sous_titre }}</p>{% endif %}
+    </div>
+    {% if lien %}
+    <a class="link-arrow" href="{{ lien }}">{{ lien_texte }} <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    {% endif %}
+</div>
+{%- endmacro %}
+
+{# Carte d'un cours (catalogue, accueil, cours similaires).
+   Le lien du titre s'étend à toute la carte (classe stretched-link). #}
 {% macro carte_cours(c) -%}
 <article class="course-card">
-    <div class="course-card-img"><i class="fas {{ c.icone }}" aria-hidden="true"></i></div>
+    <div class="course-cover cover-{{ c.categorie_id }}">
+        <span class="cover-tag">{{ c.categorie }}</span>
+        <i class="fas {{ c.icone }}" aria-hidden="true"></i>
+    </div>
     <div class="course-card-body">
-        <span class="course-card-tag">{{ c.categorie }}</span>
-        <h3 class="course-card-title">{{ c.titre }}</h3>
+        {{ niveau_barres(c.niveau) }}
+        <h3 class="course-card-title">
+            <a class="stretched-link" href="{{ url_for('course', cours_id=c.id) }}">{{ c.titre }}</a>
+        </h3>
         <p class="course-card-desc">{{ c.description }}</p>
-        <div class="course-card-meta">
-            <span><i class="fas fa-clock" aria-hidden="true"></i> {{ c.duree_heures }} h</span>
-            <span><i class="fas fa-signal" aria-hidden="true"></i> {{ c.niveau }}</span>
-            <span><i class="fas fa-star" aria-hidden="true"></i> {{ c.note }}</span>
-        </div>
-        <p class="course-card-tutor">Par {{ c.tuteur }}</p>
-        <a href="{{ url_for('course', cours_id=c.id) }}" class="btn-voir-cours">
-            Voir le cours<span class="visually-hidden"> {{ c.titre }}</span>
-        </a>
+        <ul class="course-card-meta">
+            <li><i class="far fa-clock" aria-hidden="true"></i> {{ c.duree_heures }} h</li>
+            <li><i class="fas fa-user-graduate" aria-hidden="true"></i> {{ c.nb_etudiants }} étudiants</li>
+            <li class="meta-rating"><i class="fas fa-star" aria-hidden="true"></i> {{ c.note }}</li>
+        </ul>
+    </div>
+    <div class="course-card-footer">
+        <span class="avatar avatar-sm" aria-hidden="true">{{ initiales(c.tuteur) }}</span>
+        <span class="course-card-tutor">{{ c.tuteur }}</span>
+        <span class="course-card-go" aria-hidden="true"><i class="fas fa-arrow-right"></i></span>
     </div>
 </article>
 {%- endmacro %}
 
 {# Message d'erreur sous un champ de formulaire #}
 {% macro erreur(erreurs, champ) -%}
-{% if erreurs.get(champ) %}<p class="form-error" id="{{ champ }}-erreur">{{ erreurs[champ] }}</p>{% endif %}
+{% if erreurs.get(champ) %}<p class="form-error" id="{{ champ }}-erreur"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> {{ erreurs[champ] }}</p>{% endif %}
 {%- endmacro %}

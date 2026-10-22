@@ -5,22 +5,26 @@
 {% block description %}Les réponses aux questions fréquentes sur Peer Learning.{% endblock %}
 
 {% block content %}
-    {{ page_header('fa-question-circle', 'Questions fréquentes', "Tout ce qu'il faut savoir sur Peer Learning") }}
+    {{ page_header('Aide', 'Questions fréquentes', "Tout ce qu'il faut savoir sur Peer Learning.") }}
 
-    <section class="container my-5">
-        <!-- <details> / <summary> : accordéon natif HTML, sans JavaScript -->
-        <div class="faq-list">
-            {% for q in questions %}
-            <details class="faq-item">
-                <summary>{{ q.question }}</summary>
-                <p>{{ q.reponse }}</p>
-            </details>
-            {% endfor %}
+    <section class="container section-tight">
+        <div class="split-layout">
+            <aside class="help-card">
+                <span class="help-icon"><i class="fas fa-comments" aria-hidden="true"></i></span>
+                <h2>Encore une question ?</h2>
+                <p>Vous ne trouvez pas votre réponse ? L'équipe vous répond en général sous 48 heures.</p>
+                <a class="btn-dark-custom" href="{{ url_for('contact') }}">Nous contacter</a>
+            </aside>
+
+            <!-- <details> / <summary> : accordéon natif HTML, sans JavaScript -->
+            <div class="faq-list">
+                {% for q in questions %}
+                <details class="faq-item" {% if loop.first %}open{% endif %}>
+                    <summary>{{ q.question }}</summary>
+                    <p>{{ q.reponse }}</p>
+                </details>
+                {% endfor %}
+            </div>
         </div>
-
-        <p class="text-center mt-5">
-            Vous ne trouvez pas votre réponse ?
-            <a class="text-link" href="{{ url_for('contact') }}">Écrivez-nous</a>
-        </p>
     </section>
 {% endblock %}

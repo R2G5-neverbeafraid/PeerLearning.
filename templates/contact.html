@@ -5,90 +5,96 @@
 {% block description %}Une question ou une suggestion ? Contactez l'équipe Peer Learning.{% endblock %}
 
 {% block content %}
-    {{ page_header('fa-envelope', 'Contactez-nous', 'Une question ? Une suggestion ? Écrivez-nous !') }}
+    {{ page_header('Contact', 'Contactez-nous', 'Une question, une suggestion ? Écrivez-nous, nous vous répondrons rapidement.') }}
 
-    <section class="container my-5">
-        <div class="section-title">
-            <h2>Envoyez-nous un message</h2>
-            <p>Nous vous répondrons dans les plus brefs délais</p>
-        </div>
-
-        <div class="contact-form">
-            <p class="form-note">
-                <i class="fas fa-info-circle" aria-hidden="true"></i>
-                Votre message est enregistré dans notre base de données (table <code>messages</code>).
-                Les champs marqués * sont obligatoires.
-            </p>
-
-            <!-- Validation en deux temps : le navigateur (required, minlength...)
-                 puis le serveur Python, qui revérifie tout avant l'INSERT. -->
-            <form method="post" action="{{ url_for('contact') }}" novalidate>
-                <div class="form-group">
-                    <label for="nom">Nom complet *</label>
-                    <div class="form-icon-group">
-                        <span class="form-icon"><i class="fas fa-user" aria-hidden="true"></i></span>
-                        <input type="text" id="nom" name="nom" value="{{ form.get('nom', '') }}" placeholder="Votre nom" minlength="2" required
-                               {% if erreurs.nom %}aria-invalid="true" aria-describedby="nom-erreur"{% endif %}>
+    <section class="container section-tight">
+        <div class="split-layout">
+            <aside class="contact-aside">
+                <div class="contact-info">
+                    <span class="contact-info-icon"><i class="fas fa-envelope" aria-hidden="true"></i></span>
+                    <div>
+                        <h2 class="contact-info-title">Email</h2>
+                        <p>contact@peerlearning.fr</p>
                     </div>
-                    {{ erreur(erreurs, 'nom') }}
                 </div>
-
-                <div class="form-group">
-                    <label for="email">Email *</label>
-                    <div class="form-icon-group">
-                        <span class="form-icon"><i class="fas fa-envelope" aria-hidden="true"></i></span>
-                        <input type="email" id="email" name="email" value="{{ form.get('email', '') }}" placeholder="votre.email@exemple.fr" required
-                               {% if erreurs.email %}aria-invalid="true" aria-describedby="email-erreur"{% endif %}>
+                <div class="contact-info">
+                    <span class="contact-info-icon"><i class="fas fa-map-marker-alt" aria-hidden="true"></i></span>
+                    <div>
+                        <h2 class="contact-info-title">Adresse</h2>
+                        <p>Université Protestante au Congo<br>Campus Principal</p>
                     </div>
-                    {{ erreur(erreurs, 'email') }}
                 </div>
-
-                <div class="form-group">
-                    <label for="sujet">Sujet *</label>
-                    <div class="form-icon-group">
-                        <span class="form-icon"><i class="fas fa-tag" aria-hidden="true"></i></span>
-                        <select id="sujet" name="sujet" required
-                                {% if erreurs.sujet %}aria-invalid="true" aria-describedby="sujet-erreur"{% endif %}>
-                            <option value="">-- Choisissez un sujet --</option>
-                            {% for s in sujets %}
-                            <option value="{{ s }}" {% if form.get('sujet') == s %}selected{% endif %}>{{ s }}</option>
-                            {% endfor %}
-                        </select>
+                <div class="contact-info">
+                    <span class="contact-info-icon"><i class="fas fa-clock" aria-hidden="true"></i></span>
+                    <div>
+                        <h2 class="contact-info-title">Horaires</h2>
+                        <p>Lundi - Vendredi : 9h - 18h</p>
                     </div>
-                    {{ erreur(erreurs, 'sujet') }}
                 </div>
+            </aside>
 
-                <div class="form-group">
-                    <label for="message">Message *</label>
-                    <div class="form-icon-group">
-                        <span class="form-icon"><i class="fas fa-comment-dots" aria-hidden="true"></i></span>
-                        <textarea id="message" name="message" placeholder="Votre message... (min. 10 caractères)" minlength="10" required
-                                  {% if erreurs.message %}aria-invalid="true" aria-describedby="message-erreur"{% endif %}>{{ form.get('message', '') }}</textarea>
+            <div class="form-card">
+                <h2 class="form-title">Envoyez-nous un message</h2>
+                <p class="form-note">
+                    <i class="fas fa-database" aria-hidden="true"></i>
+                    Votre message est enregistré dans notre base de données (table <code>messages</code>).
+                    Les champs marqués * sont obligatoires.
+                </p>
+
+                <!-- Validation en deux temps : le navigateur (required, minlength...)
+                     puis le serveur Python, qui revérifie tout avant l'INSERT. -->
+                <form method="post" action="{{ url_for('contact') }}" novalidate>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nom">Nom complet *</label>
+                            <div class="form-icon-group">
+                                <span class="form-icon"><i class="fas fa-user" aria-hidden="true"></i></span>
+                                <input type="text" id="nom" name="nom" value="{{ form.get('nom', '') }}" placeholder="Votre nom" minlength="2" required
+                                       {% if erreurs.nom %}aria-invalid="true" aria-describedby="nom-erreur"{% endif %}>
+                            </div>
+                            {{ erreur(erreurs, 'nom') }}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <div class="form-icon-group">
+                                <span class="form-icon"><i class="fas fa-envelope" aria-hidden="true"></i></span>
+                                <input type="email" id="email" name="email" value="{{ form.get('email', '') }}" placeholder="votre.email@exemple.fr" required
+                                       {% if erreurs.email %}aria-invalid="true" aria-describedby="email-erreur"{% endif %}>
+                            </div>
+                            {{ erreur(erreurs, 'email') }}
+                        </div>
                     </div>
-                    {{ erreur(erreurs, 'message') }}
-                </div>
 
-                <button type="submit" class="btn-submit">
-                    <i class="fas fa-paper-plane" aria-hidden="true"></i> Envoyer le message
-                </button>
-            </form>
-        </div>
+                    <div class="form-group">
+                        <label for="sujet">Sujet *</label>
+                        <div class="form-icon-group">
+                            <span class="form-icon"><i class="fas fa-tag" aria-hidden="true"></i></span>
+                            <select id="sujet" name="sujet" required
+                                    {% if erreurs.sujet %}aria-invalid="true" aria-describedby="sujet-erreur"{% endif %}>
+                                <option value="">Choisissez un sujet</option>
+                                {% for s in sujets %}
+                                <option value="{{ s }}" {% if form.get('sujet') == s %}selected{% endif %}>{{ s }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {{ erreur(erreurs, 'sujet') }}
+                    </div>
 
-        <div class="row mt-5 text-center">
-            <div class="col-md-4">
-                <div class="contact-info-icon"><i class="fas fa-envelope" aria-hidden="true"></i></div>
-                <h3 class="contact-info-title">Email</h3>
-                <p>contact@peerlearning.fr</p>
-            </div>
-            <div class="col-md-4">
-                <div class="contact-info-icon"><i class="fas fa-map-marker-alt" aria-hidden="true"></i></div>
-                <h3 class="contact-info-title">Adresse</h3>
-                <p>Université Protestante au Congo<br>Campus Principal</p>
-            </div>
-            <div class="col-md-4">
-                <div class="contact-info-icon"><i class="fas fa-clock" aria-hidden="true"></i></div>
-                <h3 class="contact-info-title">Horaires</h3>
-                <p>Lun - Ven : 9h - 18h</p>
+                    <div class="form-group">
+                        <label for="message">Message *</label>
+                        <div class="form-icon-group">
+                            <span class="form-icon"><i class="fas fa-comment-dots" aria-hidden="true"></i></span>
+                            <textarea id="message" name="message" placeholder="Votre message... (min. 10 caractères)" minlength="10" required
+                                      {% if erreurs.message %}aria-invalid="true" aria-describedby="message-erreur"{% endif %}>{{ form.get('message', '') }}</textarea>
+                        </div>
+                        {{ erreur(erreurs, 'message') }}
+                    </div>
+
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-paper-plane" aria-hidden="true"></i> Envoyer le message
+                    </button>
+                </form>
             </div>
         </div>
     </section>

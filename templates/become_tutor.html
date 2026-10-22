@@ -5,89 +5,102 @@
 {% block description %}Partagez vos connaissances : proposez votre candidature pour devenir tuteur Peer Learning.{% endblock %}
 
 {% block content %}
-    {{ page_header('fa-chalkboard-teacher', 'Devenir tuteur', "Partagez ce que vous savez et aidez d'autres étudiants à réussir") }}
+    {{ page_header("Rejoindre l'équipe", 'Devenir tuteur', "Partagez ce que vous savez et aidez d'autres étudiants à réussir.") }}
 
-    <section class="container my-5">
-        <ol class="steps">
-            <li class="step">
-                <div class="step-icon"><i class="fas fa-pen" aria-hidden="true"></i></div>
-                <h3>Candidatez</h3>
-                <p>Indiquez la matière que vous maîtrisez et votre motivation.</p>
-            </li>
-            <li class="step">
-                <div class="step-icon"><i class="fas fa-comments" aria-hidden="true"></i></div>
-                <h3>Échangez avec nous</h3>
-                <p>Nous vous recontactons pour préparer votre premier cours.</p>
-            </li>
-            <li class="step">
-                <div class="step-icon"><i class="fas fa-chalkboard" aria-hidden="true"></i></div>
-                <h3>Enseignez</h3>
-                <p>Votre cours apparaît dans le catalogue, vous animez vos séances.</p>
-            </li>
-        </ol>
+    <section class="container section-tight">
+        <div class="split-layout">
+            <aside>
+                <h2 class="aside-title">Pourquoi devenir tuteur ?</h2>
+                <ul class="benefits">
+                    <li><i class="fas fa-brain" aria-hidden="true"></i> Expliquer une matière est la meilleure façon de la maîtriser.</li>
+                    <li><i class="fas fa-award" aria-hidden="true"></i> Une expérience valorisante à mettre sur votre CV.</li>
+                    <li><i class="fas fa-hands-helping" aria-hidden="true"></i> Vous aidez concrètement les étudiants de votre université.</li>
+                </ul>
 
-        <div class="contact-form mt-5">
-            <h2 class="form-title">Votre candidature</h2>
-            <form method="post" action="{{ url_for('become_tutor') }}" novalidate>
-                <div class="form-group">
-                    <label for="nom">Nom complet *</label>
-                    <div class="form-icon-group">
-                        <span class="form-icon"><i class="fas fa-user" aria-hidden="true"></i></span>
-                        <input type="text" id="nom" name="nom" value="{{ form.get('nom', '') }}" placeholder="Votre nom" minlength="2" required
-                               {% if erreurs.nom %}aria-invalid="true" aria-describedby="nom-erreur"{% endif %}>
+                <h2 class="aside-title">Comment ça se passe ?</h2>
+                <ol class="timeline">
+                    <li>
+                        <strong>Candidatez</strong>
+                        <span>Indiquez la matière que vous maîtrisez et votre motivation.</span>
+                    </li>
+                    <li>
+                        <strong>Échangez avec nous</strong>
+                        <span>Nous vous recontactons pour préparer votre premier cours.</span>
+                    </li>
+                    <li>
+                        <strong>Enseignez</strong>
+                        <span>Votre cours apparaît dans le catalogue et vous animez vos séances.</span>
+                    </li>
+                </ol>
+            </aside>
+
+            <div class="form-card">
+                <h2 class="form-title">Votre candidature</h2>
+                <form method="post" action="{{ url_for('become_tutor') }}" novalidate>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nom">Nom complet *</label>
+                            <div class="form-icon-group">
+                                <span class="form-icon"><i class="fas fa-user" aria-hidden="true"></i></span>
+                                <input type="text" id="nom" name="nom" value="{{ form.get('nom', '') }}" placeholder="Votre nom" minlength="2" required
+                                       {% if erreurs.nom %}aria-invalid="true" aria-describedby="nom-erreur"{% endif %}>
+                            </div>
+                            {{ erreur(erreurs, 'nom') }}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <div class="form-icon-group">
+                                <span class="form-icon"><i class="fas fa-envelope" aria-hidden="true"></i></span>
+                                <input type="email" id="email" name="email" value="{{ form.get('email', '') }}" placeholder="votre.email@exemple.fr" required
+                                       {% if erreurs.email %}aria-invalid="true" aria-describedby="email-erreur"{% endif %}>
+                            </div>
+                            {{ erreur(erreurs, 'email') }}
+                        </div>
                     </div>
-                    {{ erreur(erreurs, 'nom') }}
-                </div>
 
-                <div class="form-group">
-                    <label for="email">Email *</label>
-                    <div class="form-icon-group">
-                        <span class="form-icon"><i class="fas fa-envelope" aria-hidden="true"></i></span>
-                        <input type="email" id="email" name="email" value="{{ form.get('email', '') }}" placeholder="votre.email@exemple.fr" required
-                               {% if erreurs.email %}aria-invalid="true" aria-describedby="email-erreur"{% endif %}>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="matiere">Matière enseignée *</label>
+                            <div class="form-icon-group">
+                                <span class="form-icon"><i class="fas fa-book" aria-hidden="true"></i></span>
+                                <input type="text" id="matiere" name="matiere" value="{{ form.get('matiere', '') }}" placeholder="Ex. : Physique" minlength="2" required
+                                       {% if erreurs.matiere %}aria-invalid="true" aria-describedby="matiere-erreur"{% endif %}>
+                            </div>
+                            {{ erreur(erreurs, 'matiere') }}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="niveau_etude">Niveau d'études *</label>
+                            <div class="form-icon-group">
+                                <span class="form-icon"><i class="fas fa-graduation-cap" aria-hidden="true"></i></span>
+                                <select id="niveau_etude" name="niveau_etude" required
+                                        {% if erreurs.niveau_etude %}aria-invalid="true" aria-describedby="niveau_etude-erreur"{% endif %}>
+                                    <option value="">Votre niveau</option>
+                                    {% for n in niveaux_etude %}
+                                    <option value="{{ n }}" {% if form.get('niveau_etude') == n %}selected{% endif %}>{{ n }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            {{ erreur(erreurs, 'niveau_etude') }}
+                        </div>
                     </div>
-                    {{ erreur(erreurs, 'email') }}
-                </div>
 
-                <div class="form-group">
-                    <label for="matiere">Matière enseignée *</label>
-                    <div class="form-icon-group">
-                        <span class="form-icon"><i class="fas fa-book" aria-hidden="true"></i></span>
-                        <input type="text" id="matiere" name="matiere" value="{{ form.get('matiere', '') }}" placeholder="Ex. : Physique, Algèbre linéaire..." minlength="2" required
-                               {% if erreurs.matiere %}aria-invalid="true" aria-describedby="matiere-erreur"{% endif %}>
+                    <div class="form-group">
+                        <label for="motivation">Motivation *</label>
+                        <div class="form-icon-group">
+                            <span class="form-icon"><i class="fas fa-heart" aria-hidden="true"></i></span>
+                            <textarea id="motivation" name="motivation" placeholder="Pourquoi souhaitez-vous devenir tuteur ? (min. 30 caractères)" minlength="30" required
+                                      {% if erreurs.motivation %}aria-invalid="true" aria-describedby="motivation-erreur"{% endif %}>{{ form.get('motivation', '') }}</textarea>
+                        </div>
+                        {{ erreur(erreurs, 'motivation') }}
                     </div>
-                    {{ erreur(erreurs, 'matiere') }}
-                </div>
 
-                <div class="form-group">
-                    <label for="niveau_etude">Niveau d'études *</label>
-                    <div class="form-icon-group">
-                        <span class="form-icon"><i class="fas fa-graduation-cap" aria-hidden="true"></i></span>
-                        <select id="niveau_etude" name="niveau_etude" required
-                                {% if erreurs.niveau_etude %}aria-invalid="true" aria-describedby="niveau_etude-erreur"{% endif %}>
-                            <option value="">-- Votre niveau --</option>
-                            {% for n in niveaux_etude %}
-                            <option value="{{ n }}" {% if form.get('niveau_etude') == n %}selected{% endif %}>{{ n }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    {{ erreur(erreurs, 'niveau_etude') }}
-                </div>
-
-                <div class="form-group">
-                    <label for="motivation">Motivation *</label>
-                    <div class="form-icon-group">
-                        <span class="form-icon"><i class="fas fa-heart" aria-hidden="true"></i></span>
-                        <textarea id="motivation" name="motivation" placeholder="Pourquoi souhaitez-vous devenir tuteur ? (min. 30 caractères)" minlength="30" required
-                                  {% if erreurs.motivation %}aria-invalid="true" aria-describedby="motivation-erreur"{% endif %}>{{ form.get('motivation', '') }}</textarea>
-                    </div>
-                    {{ erreur(erreurs, 'motivation') }}
-                </div>
-
-                <button type="submit" class="btn-submit">
-                    <i class="fas fa-paper-plane" aria-hidden="true"></i> Envoyer ma candidature
-                </button>
-            </form>
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-paper-plane" aria-hidden="true"></i> Envoyer ma candidature
+                    </button>
+                </form>
+            </div>
         </div>
     </section>
 {% endblock %}

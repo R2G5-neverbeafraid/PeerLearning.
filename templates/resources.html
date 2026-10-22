@@ -5,39 +5,39 @@
 {% block description %}Documents, aide-mémoire et projets téléchargeables gratuitement.{% endblock %}
 
 {% block content %}
-    {{ page_header('fa-folder-open', 'Ressources', 'Documents, cheat sheets et projets téléchargeables gratuitement') }}
+    {{ page_header('Bibliothèque', 'Ressources', 'Documents, aide-mémoire et projets téléchargeables gratuitement.') }}
 
-    <section class="container my-5">
-        <div class="section-title">
-            <h2>Ressources disponibles</h2>
-            <p>Téléchargez nos documents pour approfondir votre apprentissage</p>
-        </div>
-
-        {% for r in ressources %}
-        <div class="resource-item">
-            <div class="resource-icon">
-                <i class="fas {{ 'fa-file-archive' if r.format == 'ZIP' else 'fa-file-code' if r.format == 'SQL' else 'fa-file-alt' }}" aria-hidden="true"></i>
-            </div>
-            <div class="resource-info">
-                <h3 class="resource-title">{{ r.titre }}</h3>
-                <div class="resource-meta">
-                    {{ r.description }} • {{ r.format }} • {{ r.taille }}
-                    {% if r.cours_titre %}
-                    • Cours : <a class="text-link" href="{{ url_for('course', cours_id=r.cours_id) }}">{{ r.cours_titre }}</a>
-                    {% endif %}
+    <section class="container section-tight">
+        <div class="resource-list">
+            {% for r in ressources %}
+            <div class="resource-item">
+                <span class="resource-icon">
+                    <i class="fas {{ 'fa-file-archive' if r.format == 'ZIP' else 'fa-file-code' if r.format == 'SQL' else 'fa-file-alt' }}" aria-hidden="true"></i>
+                </span>
+                <div class="resource-info">
+                    <h2 class="resource-title">{{ r.titre }}</h2>
+                    <p class="resource-desc">{{ r.description }}</p>
+                    <div class="resource-meta">
+                        <span class="badge-soft">{{ r.format }}</span>
+                        <span>{{ r.taille }}</span>
+                        {% if r.cours_titre %}
+                        <a href="{{ url_for('course', cours_id=r.cours_id) }}"><i class="fas fa-book-open" aria-hidden="true"></i> {{ r.cours_titre }}</a>
+                        {% endif %}
+                    </div>
                 </div>
+                {% if r.fichier %}
+                <a class="resource-btn" href="{{ url_for('static', filename='ressources/' ~ r.fichier) }}" download>
+                    <i class="fas fa-download" aria-hidden="true"></i> Télécharger
+                </a>
+                {% else %}
+                <span class="resource-btn resource-btn-disabled">Bientôt disponible</span>
+                {% endif %}
             </div>
-            {% if r.fichier %}
-            <a class="resource-btn" href="{{ url_for('static', filename='ressources/' ~ r.fichier) }}" download>
-                <i class="fas fa-download" aria-hidden="true"></i> Télécharger
-            </a>
-            {% else %}
-            <span class="resource-btn resource-btn-disabled">Bientôt disponible</span>
-            {% endif %}
+            {% endfor %}
         </div>
-        {% endfor %}
 
         <p class="resources-note">
+            <i class="fas fa-info-circle" aria-hidden="true"></i>
             Les ressources marquées « Bientôt disponible » sont fictives pour le projet universitaire.
         </p>
     </section>

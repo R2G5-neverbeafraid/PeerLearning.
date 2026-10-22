@@ -6,6 +6,9 @@
     <title>{% block title %}{% endblock %} - Peer Learning</title>
     <meta name="description" content="{% block description %}Peer Learning, la plateforme d'apprentissage collaboratif où les étudiants enseignent aux étudiants.{% endblock %}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -26,10 +29,11 @@
     {% set page_active = 'courses' if request.endpoint == 'course' else request.endpoint %}
 
     <!-- NAVIGATION : sur mobile, la case à cocher cachée ouvre/ferme le menu (sans JS) -->
-    <nav class="navbar sticky-top" aria-label="Navigation principale">
-        <div class="container">
-            <a class="navbar-brand" href="{{ url_for('index') }}">
-                <i class="fas fa-graduation-cap" aria-hidden="true"></i> Peer Learning
+    <nav class="site-nav" aria-label="Navigation principale">
+        <div class="container nav-inner">
+            <a class="brand" href="{{ url_for('index') }}">
+                <span class="brand-mark"><i class="fas fa-graduation-cap" aria-hidden="true"></i></span>
+                Peer Learning
             </a>
             <input type="checkbox" id="menu-toggle" class="menu-toggle">
             <label for="menu-toggle" class="menu-btn" aria-label="Ouvrir ou fermer le menu">
@@ -38,13 +42,14 @@
             <ul class="nav-menu">
                 {% for endpoint, libelle in liens %}
                 <li>
-                    <a class="nav-link{% if page_active == endpoint %} active{% endif %}"
+                    <a class="nav-item-link{% if page_active == endpoint %} active{% endif %}"
                        href="{{ url_for(endpoint) }}"
                        {% if page_active == endpoint %}aria-current="page"{% endif %}>{{ libelle }}</a>
                 </li>
                 {% endfor %}
                 <li>
-                    <a class="nav-cta{% if page_active == 'become_tutor' %} active{% endif %}" href="{{ url_for('become_tutor') }}">Devenir tuteur</a>
+                    <a class="nav-cta" href="{{ url_for('become_tutor') }}"
+                       {% if page_active == 'become_tutor' %}aria-current="page"{% endif %}>Devenir tuteur</a>
                 </li>
             </ul>
         </div>
@@ -66,30 +71,44 @@
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="footer">
+    <footer class="site-footer">
         <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <h2 class="footer-title"><i class="fas fa-graduation-cap" aria-hidden="true"></i> Peer Learning</h2>
-                    <p>Plateforme d'apprentissage collaboratif : des étudiants qui enseignent aux étudiants.</p>
+            <div class="footer-grid">
+                <div class="footer-about">
+                    <a class="brand brand-light" href="{{ url_for('index') }}">
+                        <span class="brand-mark"><i class="fas fa-graduation-cap" aria-hidden="true"></i></span>
+                        Peer Learning
+                    </a>
+                    <p>La plateforme d'apprentissage collaboratif où les étudiants enseignent aux étudiants.</p>
                 </div>
-                <div class="col-md-4">
-                    <h2 class="footer-title">Liens rapides</h2>
-                    <ul class="list-unstyled footer-links">
-                        {% for endpoint, libelle in liens %}
+                <div>
+                    <h2 class="footer-title">Plateforme</h2>
+                    <ul class="footer-links">
+                        {% for endpoint, libelle in liens[:4] %}
                         <li><a href="{{ url_for(endpoint) }}">{{ libelle }}</a></li>
                         {% endfor %}
+                    </ul>
+                </div>
+                <div>
+                    <h2 class="footer-title">Aide</h2>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('faq') }}">Questions fréquentes</a></li>
+                        <li><a href="{{ url_for('contact') }}">Nous contacter</a></li>
                         <li><a href="{{ url_for('become_tutor') }}">Devenir tuteur</a></li>
                     </ul>
                 </div>
-                <div class="col-md-4">
+                <div>
                     <h2 class="footer-title">Contact</h2>
-                    <p><i class="fas fa-envelope" aria-hidden="true"></i> contact@peerlearning.fr</p>
-                    <p><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Université Protestante au Congo</p>
+                    <ul class="footer-links footer-contact">
+                        <li><i class="fas fa-envelope" aria-hidden="true"></i> contact@peerlearning.fr</li>
+                        <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Université Protestante au Congo</li>
+                        <li><i class="fas fa-clock" aria-hidden="true"></i> Lun - Ven : 9h - 18h</li>
+                    </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>25Labs © 2026 Peer Learning - Projet universitaire L1</p>
+                <p>25Labs © 2026 Peer Learning</p>
+                <p>Projet universitaire L1 · Université Protestante au Congo</p>
             </div>
         </div>
     </footer>
