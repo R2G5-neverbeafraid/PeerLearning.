@@ -27,10 +27,24 @@ Au premier lancement, la base `peerlearning.db` est créée toute seule à parti
 `database/schema.sql` (les tables) et `database/seed.sql` (les données).
 Pour la remettre à zéro : `flask --app app init-db`.
 
+## Mettre le site en ligne (Render)
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/R2G5-neverbeafraid/PeerLearning.)
+
+Le fichier `render.yaml` contient toute la configuration : Render installe les
+dépendances, crée la base SQLite puis lance le site avec `gunicorn`.
+Chaque `git push` sur la branche suivie redéploie le site automatiquement.
+
+Limites de l'offre gratuite :
+- le site se met en veille après 15 minutes sans visite (la visite suivante prend ~30 s) ;
+- la base est recréée à chaque redémarrage : les messages et candidatures envoyés
+  par les visiteurs ne sont pas conservés.
+
 ## Organisation des fichiers
 
 ```
 app.py                  Le serveur : une fonction Python par page + les requêtes SQL
+render.yaml             Configuration du déploiement sur Render
 database/
   schema.sql            Création des tables (CREATE TABLE)
   seed.sql              Données de départ (INSERT INTO)
