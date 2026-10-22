@@ -2252,6 +2252,34 @@ code {
     margin: 0;
 }
 
+/* Signature du studio 25 Labs (charte TwentyFive Labs) :
+   « by 25 Labs » en JetBrains Mono, suivi du symbole. */
+.studio-signature {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 0.78rem;
+}
+
+.studio-tagline {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.studio-tagline::after {
+    content: "·";
+    margin-left: 0.6rem;
+}
+
+.studio-by {
+    color: rgba(255, 255, 255, 0.75);
+    white-space: nowrap;
+}
+
+.studio-signature img {
+    border-radius: 6px;
+}
+
 /* -----------------------------------------------------
    14. RESPONSIVE
    ----------------------------------------------------- */
@@ -2419,5 +2447,17 @@ code {
     .footer-grid {
         grid-template-columns: 1fr;
         gap: 2rem;
+    }
+
+    .studio-signature {
+        flex-wrap: wrap;
+    }
+
+    .studio-tagline {
+        flex-basis: 100%;
+    }
+
+    .studio-tagline::after {
+        content: none;
     }
 }
