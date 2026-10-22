@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% from "macros.html" import etoiles, page_header %}
+
+{% block title %}Tuteurs{% endblock %}
+{% block description %}Les étudiants tuteurs de Peer Learning et les cours qu'ils proposent.{% endblock %}
+
+{% block content %}
+    {{ page_header('fa-users', 'Nos tuteurs', 'Des étudiants passionnés qui partagent leurs connaissances') }}
+
+    <section class="container my-5">
+        <div class="section-title">
+            <h2>Rencontrez nos tuteurs</h2>
+            <p>Chacun apporte son expertise et sa passion pour l'enseignement</p>
+        </div>
+        <div class="tutors-grid">
+            {% for t in tuteurs %}
+            <article class="tutor-card" id="tuteur-{{ t.id }}">
+                <div class="tutor-avatar"><i class="fas {{ t.icone }}" aria-hidden="true"></i></div>
+                <h3 class="tutor-name">{{ t.prenom }} {{ t.nom }}</h3>
+                <p class="tutor-subject">{{ t.matiere }}</p>
+                <p class="tutor-bio">{{ t.bio }}</p>
+                <div class="tutor-rating">{{ etoiles(t.note) }} {{ t.note }}</div>
+                <p class="tutor-stats">
+                    <i class="fas fa-book" aria-hidden="true"></i> {{ t.nb_cours }} cours |
+                    <i class="fas fa-users" aria-hidden="true"></i> {{ t.nb_etudiants }} étudiants
+                </p>
+                {% if cours_par_tuteur.get(t.id) %}
+                <ul class="tutor-courses">
+                    {% for c in cours_par_tuteur[t.id] %}
+                    <li><a href="{{ url_for('course', cours_id=c.id) }}">{{ c.titre }}</a></li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="tutor-courses-empty">Cours en préparation</p>
+                {% endif %}
+            </article>
+            {% endfor %}
+        </div>
+
+        <div class="cta-banner">
+            <h2>Vous maîtrisez une matière ?</h2>
+            <p>Rejoignez l'équipe et aidez d'autres étudiants à progresser.</p>
+            <a href="{{ url_for('become_tutor') }}" class="btn-primary-custom">Devenir tuteur</a>
+        </div>
+    </section>
+{% endblock %}

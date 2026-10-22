@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% from "macros.html" import carte_cours, page_header %}
+
+{% block title %}Cours{% endblock %}
+{% block description %}Le catalogue complet des cours Peer Learning, créés par des étudiants pour des étudiants.{% endblock %}
+
+{% block content %}
+    {{ page_header('fa-book', 'Nos cours', 'Le catalogue complet des cours créés par des étudiants pour des étudiants') }}
+
+    <section class="container my-5">
+
+        <!-- RECHERCHE ET FILTRES : formulaire GET, les choix apparaissent dans l'URL -->
+        <form class="course-filters" method="get" action="{{ url_for('courses') }}" role="search">
+            <div class="filter-search">
+                <label for="q" class="visually-hidden">Rechercher un cours</label>
+                <i class="fas fa-search" aria-hidden="true"></i>
+                <input type="search" id="q" name="q" value="{{ recherche }}" placeholder="Rechercher un cours...">
+            </div>
+            <div>
+                <label for="categorie" class="visually-hidden">Matière</label>
+                <select id="categorie" name="categorie">
+                    <option value="">Toutes les matières</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.nom }}" {% if cat.nom == categorie %}selected{% endif %}>{{ cat.nom }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="niveau" class="visually-hidden">Niveau</label>
+                <select id="niveau" name="niveau">
+                    <option value="">Tous les niveaux</option>
+                    {% for n in niveaux %}
+                    <option value="{{ n }}" {% if n == niveau %}selected{% endif %}>{{ n }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn-filter">Filtrer</button>
+        </form>
+
+        <p class="results-count">
+            {{ cours | length }} cours trouvé{{ 's' if cours | length > 1 }}
+            {% if recherche or categorie or niveau %}
+            · <a href="{{ url_for('courses') }}">Réinitialiser les filtres</a>
+            {% endif %}
+        </p>
+
+        {% if cours %}
+        <div class="courses-grid">
+            {% for c in cours %}
+            {{ carte_cours(c) }}
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-search" aria-hidden="true"></i>
+            <p>Aucun cours ne correspond à votre recherche.</p>
+            <a href="{{ url_for('courses') }}" class="btn-dark-custom">Voir tous les cours</a>
+        </div>
+        {% endif %}
+    </section>
+{% endblock %}

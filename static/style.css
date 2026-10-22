@@ -1,7 +1,7 @@
 /* =====================================================
    PEER LEARNING - Style principal
    Direction artistique : épurée, bleu nuit / gris / blanc
-   Projet universitaire L1 - HTML5, CSS3 (site 100% statique, sans JS)
+   Projet universitaire L1 - HTML5, CSS3 (pages générées par Flask + SQLite)
    ===================================================== */
 
 /* -----------------------------------------------------
@@ -92,17 +92,86 @@ select:focus-visible {
     border-bottom-color: var(--couleur-principale);
 }
 
+.nav-menu {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    list-style: none;
+    margin: 0 0 0 auto;
+    padding: 0;
+}
+
+.nav-cta {
+    display: inline-block;
+    margin-left: 0.6rem;
+    padding: 0.5rem 1.2rem;
+    border-radius: 50px;
+    background: var(--couleur-principale);
+    color: var(--couleur-blanc);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: var(--transition);
+}
+
+.nav-cta:hover,
+.nav-cta.active {
+    background: var(--couleur-secondaire);
+    color: var(--couleur-blanc);
+}
+
+/* Menu mobile sans JS : la case à cocher est cachée visuellement
+   (mais reste accessible au clavier), le label sert de bouton. */
+.menu-toggle {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+}
+
+.menu-btn {
+    display: none;
+    cursor: pointer;
+    font-size: 1.3rem;
+    color: var(--couleur-principale);
+    padding: 0.3rem 0.6rem;
+    border-radius: 8px;
+}
+
+.menu-toggle:focus-visible + .menu-btn {
+    outline: 2px solid var(--couleur-principale);
+    outline-offset: 2px;
+}
+
+/* Lien d'évitement : visible uniquement au clavier */
+.skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -3rem;
+    z-index: 2000;
+    background: var(--couleur-principale);
+    color: var(--couleur-blanc);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+}
+
+.skip-link:focus {
+    top: 1rem;
+}
+
 /* -----------------------------------------------------
    BANDEAU D'EN-TÊTE (pages secondaires)
    ----------------------------------------------------- */
-.search-bar {
+.page-header {
     background: var(--couleur-secondaire);
     padding: 3.5rem 0;
     color: var(--couleur-blanc);
     text-align: center;
 }
 
-.search-bar h2 {
+.page-header h1 {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -110,7 +179,7 @@ select:focus-visible {
     margin-bottom: 0.6rem;
 }
 
-.search-bar p {
+.page-header p {
     color: rgba(255, 255, 255, 0.65);
     font-size: 0.95rem;
 }
@@ -155,6 +224,73 @@ select:focus-visible {
 .btn-primary-custom:hover {
     background-color: var(--couleur-fond);
     transform: translateY(-2px);
+}
+
+.hero-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* Bouton contour blanc (sur fond bleu nuit) */
+.btn-outline-custom {
+    display: inline-block;
+    padding: 0.85rem 2.2rem;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: var(--couleur-blanc);
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: var(--transition);
+}
+
+.btn-outline-custom:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--couleur-blanc);
+    color: var(--couleur-blanc);
+}
+
+/* Boutons sur fond clair */
+.btn-dark-custom,
+.btn-light-custom {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.btn-dark-custom {
+    background: var(--couleur-principale);
+    color: var(--couleur-blanc);
+}
+
+.btn-dark-custom:hover {
+    background: var(--couleur-secondaire);
+    color: var(--couleur-blanc);
+    transform: translateY(-2px);
+}
+
+.btn-light-custom {
+    border: 1px solid var(--couleur-bordure);
+    color: var(--couleur-principale);
+}
+
+.btn-light-custom:hover {
+    border-color: var(--couleur-principale);
+}
+
+/* Lien dans un texte */
+.text-link {
+    color: var(--couleur-principale);
+    font-weight: 600;
+    border-bottom: 1px solid rgba(22, 33, 62, 0.25);
+}
+
+.text-link:hover {
+    border-bottom-color: var(--couleur-principale);
 }
 
 /* -----------------------------------------------------
@@ -253,6 +389,112 @@ select:focus-visible {
 
 .btn-voir-cours:hover {
     background: var(--couleur-secondaire);
+    color: var(--couleur-blanc);
+}
+
+.course-card-tutor {
+    font-size: 0.8rem;
+    color: var(--couleur-texte-att);
+    margin-bottom: 1rem;
+}
+
+/* -----------------------------------------------------
+   RECHERCHE ET FILTRES (page Cours)
+   ----------------------------------------------------- */
+.course-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    background: var(--couleur-blanc);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    padding: 1rem;
+}
+
+.course-filters input,
+.course-filters select {
+    width: 100%;
+    padding: 0.65rem 1rem;
+    border: 1px solid var(--couleur-bordure);
+    border-radius: 50px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    color: var(--couleur-texte);
+    background: var(--couleur-blanc);
+}
+
+.filter-search {
+    position: relative;
+    flex: 1 1 240px;
+}
+
+.filter-search i {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--couleur-texte-att);
+    font-size: 0.85rem;
+}
+
+.filter-search input {
+    padding-left: 2.5rem;
+}
+
+.btn-filter {
+    background: var(--couleur-principale);
+    color: var(--couleur-blanc);
+    border: none;
+    border-radius: 50px;
+    padding: 0.65rem 1.6rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-filter:hover {
+    background: var(--couleur-secondaire);
+}
+
+.results-count {
+    margin: 1.25rem 0 0;
+    font-size: 0.85rem;
+    color: var(--couleur-texte-att);
+}
+
+.results-count a {
+    color: var(--couleur-principale);
+    font-weight: 600;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--couleur-texte-att);
+}
+
+.empty-state > i {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--couleur-bordure);
+}
+
+.empty-state h1 {
+    color: var(--couleur-secondaire);
+    font-size: 1.6rem;
+    margin-bottom: 0.6rem;
+}
+
+.empty-state p {
+    margin-bottom: 1.5rem;
+}
+
+.error-code {
+    font-size: 4.5rem;
+    font-weight: 700;
+    color: var(--couleur-principale);
+    line-height: 1;
 }
 
 /* -----------------------------------------------------
@@ -288,16 +530,130 @@ select:focus-visible {
     font-size: 1.9rem;
 }
 
-.course-detail-header .meta {
+.course-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
     color: var(--couleur-texte-att);
     font-size: 0.9rem;
+}
+
+.course-facts a {
+    color: var(--couleur-principale);
+}
+
+.stars {
+    color: var(--couleur-principale);
+    letter-spacing: 0.05em;
+}
+
+/* Fil d'Ariane */
+.breadcrumb-custom {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem;
+    font-size: 0.85rem;
+    color: var(--couleur-texte-att);
+}
+
+.breadcrumb-custom li + li::before {
+    content: "/";
+    margin: 0 0.6rem;
+    color: var(--couleur-bordure);
+}
+
+.breadcrumb-custom a:hover {
+    color: var(--couleur-principale);
+}
+
+/* Programme numéroté */
+.chapters {
+    counter-reset: chapitre;
+    list-style: none;
+    padding-left: 0 !important;
+}
+
+.chapters li {
+    counter-increment: chapitre;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.55rem 0;
+    margin: 0 !important;
+    border-bottom: 1px solid var(--couleur-bordure);
+}
+
+.chapters li:last-child {
+    border-bottom: none;
+}
+
+.chapters li::before {
+    content: counter(chapitre);
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(22, 33, 62, 0.06);
+    color: var(--couleur-principale);
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.course-detail-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* Cours précédent / suivant */
+.course-pager {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.course-pager a {
+    flex: 0 1 48%;
+    background: var(--couleur-blanc);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    padding: 1rem 1.25rem;
+    font-weight: 600;
+    color: var(--couleur-secondaire);
+    transition: var(--transition);
+}
+
+.course-pager a:hover {
+    border-color: var(--couleur-principale-clair);
+}
+
+.course-pager a.next {
+    text-align: right;
+    margin-left: auto;
+}
+
+.course-pager span {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--couleur-texte-att);
 }
 
 .course-detail-section {
     margin-bottom: 2rem;
 }
 
-.course-detail-section h3 {
+.course-detail-section h2 {
     color: var(--couleur-principale);
     margin-bottom: 1rem;
     font-size: 1.05rem;
@@ -376,6 +732,73 @@ select:focus-visible {
     font-size: 0.85rem;
 }
 
+.tutor-stats {
+    margin: 0.8rem 0 0;
+    font-size: 0.85rem;
+    color: var(--couleur-texte-att);
+}
+
+.tutor-courses {
+    list-style: none;
+    padding: 1rem 0 0;
+    margin: 1rem 0 0;
+    border-top: 1px solid var(--couleur-bordure);
+    font-size: 0.85rem;
+}
+
+.tutor-courses li + li {
+    margin-top: 0.35rem;
+}
+
+.tutor-courses a {
+    color: var(--couleur-principale);
+    font-weight: 600;
+}
+
+.tutor-courses a:hover {
+    text-decoration: underline;
+}
+
+.tutor-courses-empty {
+    padding-top: 1rem;
+    margin: 1rem 0 0;
+    border-top: 1px solid var(--couleur-bordure);
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--couleur-texte-att);
+}
+
+/* Ancre #tuteur-N : met en évidence le tuteur ciblé depuis une page de cours */
+.tutor-card:target {
+    border-color: var(--couleur-principale);
+    box-shadow: 0 0 0 3px rgba(22, 33, 62, 0.12);
+}
+
+.tutor-card {
+    scroll-margin-top: 6rem;
+}
+
+/* Bandeau d'appel à l'action */
+.cta-banner {
+    background: linear-gradient(160deg, var(--couleur-principale), var(--couleur-secondaire));
+    color: var(--couleur-blanc);
+    border-radius: var(--rayon-bordure);
+    padding: 3rem 1.5rem;
+    margin-top: 3rem;
+    text-align: center;
+}
+
+.cta-banner h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+}
+
+.cta-banner p {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 1.5rem;
+}
+
 .tutors-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -421,6 +844,7 @@ select:focus-visible {
 }
 
 .resource-title {
+    font-size: 1rem;
     font-weight: 700;
     color: var(--couleur-secondaire);
     margin-bottom: 0.3rem;
@@ -449,8 +873,7 @@ select:focus-visible {
     background: var(--couleur-secondaire);
 }
 
-/* Bouton de téléchargement désactivé : les ressources sont fictives,
-   aucun fichier réel n'est fourni avec ce projet de démonstration. */
+/* Ressource fictive : pas encore de fichier (colonne fichier = NULL) */
 .resource-btn-disabled {
     background: var(--couleur-bordure);
     color: var(--couleur-texte-att);
@@ -459,10 +882,150 @@ select:focus-visible {
 
 .resource-btn-disabled:hover {
     background: var(--couleur-bordure);
+    color: var(--couleur-texte-att);
+}
+
+.resource-btn:not(.resource-btn-disabled):hover {
+    color: var(--couleur-blanc);
+}
+
+.resources-note {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+    color: var(--couleur-texte-att);
 }
 
 /* -----------------------------------------------------
-   FORMULAIRE DE CONTACT (validation HTML native uniquement)
+   FAQ (accordéon natif <details>)
+   ----------------------------------------------------- */
+.faq-list {
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    background: var(--couleur-blanc);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    margin-bottom: 0.8rem;
+    transition: var(--transition);
+}
+
+.faq-item[open] {
+    border-color: var(--couleur-principale-clair);
+}
+
+.faq-item summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 1.1rem 3rem 1.1rem 1.4rem;
+    font-weight: 700;
+    color: var(--couleur-secondaire);
+    position: relative;
+}
+
+.faq-item summary::-webkit-details-marker {
+    display: none;
+}
+
+.faq-item summary::after {
+    content: "+";
+    position: absolute;
+    right: 1.4rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: var(--couleur-principale);
+}
+
+.faq-item[open] summary::after {
+    content: "−";
+}
+
+.faq-item p {
+    padding: 0 1.4rem 1.2rem;
+    margin: 0;
+    color: var(--couleur-texte-att);
+}
+
+/* -----------------------------------------------------
+   ÉTAPES (« Comment ça marche », « Devenir tuteur »)
+   ----------------------------------------------------- */
+.steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.step {
+    background: var(--couleur-blanc);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    padding: 2rem 1.5rem;
+    text-align: center;
+}
+
+.step-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(22, 33, 62, 0.06);
+    color: var(--couleur-principale);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    margin: 0 auto 1rem;
+}
+
+.step h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--couleur-secondaire);
+    margin-bottom: 0.5rem;
+}
+
+.step p {
+    font-size: 0.9rem;
+    color: var(--couleur-texte-att);
+    margin: 0;
+}
+
+/* -----------------------------------------------------
+   MESSAGE DE CONFIRMATION (après l'envoi d'un formulaire)
+   ----------------------------------------------------- */
+.flash-message {
+    background: var(--couleur-blanc);
+    border: 1px solid var(--couleur-bordure);
+    border-left: 4px solid var(--couleur-principale);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    color: var(--couleur-secondaire);
+    font-weight: 600;
+}
+
+/* -----------------------------------------------------
+   INFOS DE CONTACT
+   ----------------------------------------------------- */
+.contact-info-icon {
+    font-size: 2rem;
+    color: var(--couleur-principale);
+    margin-bottom: 0.5rem;
+}
+
+.contact-info-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--couleur-secondaire);
+}
+
+/* -----------------------------------------------------
+   FORMULAIRES (contact, devenir tuteur)
    ----------------------------------------------------- */
 .contact-form {
     background: var(--couleur-blanc);
@@ -543,13 +1106,28 @@ select:focus-visible {
     border-left: none;
 }
 
-/* Validation native : le message d'erreur du navigateur
-   s'affiche automatiquement à la soumission (attributs required,
-   type="email", minlength). On met juste en évidence le champ. */
+/* Champ en erreur : invalide côté navigateur (après saisie)
+   ou refusé par le serveur (aria-invalid="true"). */
 .form-group input:invalid:not(:placeholder-shown),
 .form-group textarea:invalid:not(:placeholder-shown),
-.form-icon-group input:invalid:not(:placeholder-shown) {
+.form-group [aria-invalid="true"] {
     border-color: var(--couleur-erreur);
+}
+
+.form-error {
+    color: var(--couleur-erreur);
+    font-size: 0.82rem;
+    margin: 0.4rem 0 0;
+}
+
+.form-title {
+    color: var(--couleur-secondaire);
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
+    text-align: center;
 }
 
 .form-note {
@@ -560,6 +1138,11 @@ select:focus-visible {
     margin-bottom: 1.5rem;
     font-size: 0.85rem;
     border: 1px solid rgba(22, 33, 62, 0.08);
+}
+
+.form-note code {
+    color: var(--couleur-principale);
+    font-weight: 600;
 }
 
 .btn-submit {
@@ -590,7 +1173,7 @@ select:focus-visible {
     margin-top: 4rem;
 }
 
-.footer h5 {
+.footer-title {
     font-weight: 700;
     font-size: 0.85rem;
     text-transform: uppercase;
@@ -677,6 +1260,41 @@ select:focus-visible {
 /* -----------------------------------------------------
    RESPONSIVE
    ----------------------------------------------------- */
+/* Menu replié en dessous de 992px : le label ☰ affiche/masque la liste */
+@media (max-width: 991px) {
+    .menu-btn {
+        display: block;
+        margin-left: auto;
+    }
+
+    .nav-menu {
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        margin-top: 0.75rem;
+    }
+
+    .menu-toggle:checked ~ .nav-menu {
+        display: flex;
+    }
+
+    .nav-link {
+        border-bottom: none;
+        border-left: 2px solid transparent;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+        border-left-color: var(--couleur-principale);
+    }
+
+    .nav-cta {
+        margin: 0.5rem 0 0;
+        text-align: center;
+    }
+}
+
 @media (max-width: 768px) {
     .hero h1 {
         font-size: 1.9rem;
@@ -696,8 +1314,29 @@ select:focus-visible {
         text-align: center;
     }
 
-    .contact-form {
+    .contact-form,
+    .course-detail {
         padding: 1.5rem;
+    }
+
+    .course-pager {
+        flex-direction: column;
+    }
+
+    .course-pager a {
+        flex-basis: auto;
+    }
+
+    .course-pager a.next {
+        margin-left: 0;
+    }
+
+    .btn-filter {
+        width: 100%;
+    }
+
+    .course-filters > div:not(.filter-search) {
+        flex: 1 1 45%;
     }
 
     .form-icon-group {

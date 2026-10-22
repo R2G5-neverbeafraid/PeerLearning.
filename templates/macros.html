@@ -1,0 +1,53 @@
+{# Macros réutilisées dans plusieurs pages #}
+
+{# Étoiles arrondies à la demi-étoile : 4.4 -> 4,5 étoiles #}
+{% macro etoiles(note) -%}
+{% set arrondi = (note * 2) | round / 2 %}
+<span class="stars" role="img" aria-label="Note : {{ note }} sur 5">
+    {%- for i in range(1, 6) -%}
+    {%- if arrondi >= i -%}
+    <i class="fas fa-star" aria-hidden="true"></i>
+    {%- elif arrondi >= i - 0.5 -%}
+    <i class="fas fa-star-half-alt" aria-hidden="true"></i>
+    {%- else -%}
+    <i class="far fa-star" aria-hidden="true"></i>
+    {%- endif -%}
+    {%- endfor -%}
+</span>
+{%- endmacro %}
+
+{# En-tête des pages secondaires #}
+{% macro page_header(icone, titre, sous_titre) -%}
+<section class="page-header">
+    <div class="container">
+        <h1><i class="fas {{ icone }}" aria-hidden="true"></i> {{ titre }}</h1>
+        <p>{{ sous_titre }}</p>
+    </div>
+</section>
+{%- endmacro %}
+
+{# Carte d'un cours (catalogue, accueil, cours similaires) #}
+{% macro carte_cours(c) -%}
+<article class="course-card">
+    <div class="course-card-img"><i class="fas {{ c.icone }}" aria-hidden="true"></i></div>
+    <div class="course-card-body">
+        <span class="course-card-tag">{{ c.categorie }}</span>
+        <h3 class="course-card-title">{{ c.titre }}</h3>
+        <p class="course-card-desc">{{ c.description }}</p>
+        <div class="course-card-meta">
+            <span><i class="fas fa-clock" aria-hidden="true"></i> {{ c.duree_heures }} h</span>
+            <span><i class="fas fa-signal" aria-hidden="true"></i> {{ c.niveau }}</span>
+            <span><i class="fas fa-star" aria-hidden="true"></i> {{ c.note }}</span>
+        </div>
+        <p class="course-card-tutor">Par {{ c.tuteur }}</p>
+        <a href="{{ url_for('course', cours_id=c.id) }}" class="btn-voir-cours">
+            Voir le cours<span class="visually-hidden"> {{ c.titre }}</span>
+        </a>
+    </div>
+</article>
+{%- endmacro %}
+
+{# Message d'erreur sous un champ de formulaire #}
+{% macro erreur(erreurs, champ) -%}
+{% if erreurs.get(champ) %}<p class="form-error" id="{{ champ }}-erreur">{{ erreurs[champ] }}</p>{% endif %}
+{%- endmacro %}

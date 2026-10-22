@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% from "macros.html" import page_header %}
+
+{% block title %}FAQ{% endblock %}
+{% block description %}Les réponses aux questions fréquentes sur Peer Learning.{% endblock %}
+
+{% block content %}
+    {{ page_header('fa-question-circle', 'Questions fréquentes', "Tout ce qu'il faut savoir sur Peer Learning") }}
+
+    <section class="container my-5">
+        <!-- <details> / <summary> : accordéon natif HTML, sans JavaScript -->
+        <div class="faq-list">
+            {% for q in questions %}
+            <details class="faq-item">
+                <summary>{{ q.question }}</summary>
+                <p>{{ q.reponse }}</p>
+            </details>
+            {% endfor %}
+        </div>
+
+        <p class="text-center mt-5">
+            Vous ne trouvez pas votre réponse ?
+            <a class="text-link" href="{{ url_for('contact') }}">Écrivez-nous</a>
+        </p>
+    </section>
+{% endblock %}

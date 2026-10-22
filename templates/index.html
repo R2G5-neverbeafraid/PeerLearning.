@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% from "macros.html" import carte_cours %}
+
+{% block title %}Apprenez ensemble{% endblock %}
+
+{% block content %}
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+            <h1><i class="fas fa-graduation-cap" aria-hidden="true"></i> Peer Learning</h1>
+            <p>La plateforme d'apprentissage collaboratif pour étudiants. Apprenez, partagez, progressez ensemble.</p>
+            <div class="hero-actions">
+                <a href="{{ url_for('courses') }}" class="btn-primary-custom">Découvrir les cours</a>
+                <a href="{{ url_for('become_tutor') }}" class="btn-outline-custom">Devenir tuteur</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATISTIQUES : calculées en SQL (COUNT, SUM) -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="row">
+                {% for nombre, libelle in [
+                    (stats.nb_cours, 'Cours disponibles'),
+                    (stats.nb_tuteurs, 'Tuteurs passionnés'),
+                    (stats.nb_etudiants, 'Étudiants inscrits'),
+                    (stats.nb_ressources, 'Ressources gratuites'),
+                ] %}
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">{{ nombre }}</div>
+                        <div class="stat-label">{{ libelle }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- COMMENT ÇA MARCHE -->
+    <section class="container my-5">
+        <div class="section-title">
+            <h2>Comment ça marche ?</h2>
+            <p>Trois étapes pour apprendre avec vos pairs</p>
+        </div>
+        <ol class="steps">
+            <li class="step">
+                <div class="step-icon"><i class="fas fa-search" aria-hidden="true"></i></div>
+                <h3>1. Choisissez un cours</h3>
+                <p>Parcourez le catalogue et filtrez par matière ou par niveau.</p>
+            </li>
+            <li class="step">
+                <div class="step-icon"><i class="fas fa-user-friends" aria-hidden="true"></i></div>
+                <h3>2. Apprenez avec un tuteur</h3>
+                <p>Un étudiant plus avancé vous explique la matière avec ses mots.</p>
+            </li>
+            <li class="step">
+                <div class="step-icon"><i class="fas fa-hands-helping" aria-hidden="true"></i></div>
+                <h3>3. Transmettez à votre tour</h3>
+                <p>Une fois à l'aise, devenez tuteur et aidez les suivants.</p>
+            </li>
+        </ol>
+    </section>
+
+    <!-- COURS POPULAIRES : ORDER BY nb_etudiants DESC LIMIT 3 -->
+    <section class="container my-5">
+        <div class="section-title">
+            <h2>Cours les plus populaires</h2>
+            <p>Découvrez les cours préférés de nos étudiants</p>
+        </div>
+        <div class="courses-grid">
+            {% for c in populaires %}
+            {{ carte_cours(c) }}
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{{ url_for('courses') }}" class="btn-dark-custom">Voir tous les cours</a>
+        </div>
+    </section>
+{% endblock %}
