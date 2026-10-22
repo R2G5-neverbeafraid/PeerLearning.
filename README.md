@@ -1,8 +1,7 @@
 # Peer Learning
 
 Plateforme d'apprentissage collaboratif : des étudiants qui enseignent aux étudiants.
-Projet universitaire L1 — Université Protestante au Congo.
-Un projet **by 25 Labs**, studio de Kinshasa.
+© 2026 Peer Learning · 25 Labs
 
 **Technologies :** HTML5, CSS3, Bootstrap 5 (grille), Font Awesome, **Python / Flask** et **SQLite**.
 

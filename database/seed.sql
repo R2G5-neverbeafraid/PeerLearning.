@@ -1,6 +1,6 @@
 -- =====================================================
 -- PEER LEARNING - Données de départ
--- Données fictives pour le projet universitaire.
+-- Données de démonstration.
 -- =====================================================
 
 INSERT INTO categories (id, nom) VALUES
@@ -81,7 +81,7 @@ INSERT INTO faq (question, reponse, ordre) VALUES
     ('Qu''est-ce que le peer learning ?',
      'C''est l''apprentissage entre pairs : des étudiants plus avancés expliquent une matière à d''autres étudiants, avec leurs mots et leurs propres astuces.', 1),
     ('Les cours sont-ils gratuits ?',
-     'Oui. Peer Learning est un projet étudiant : tous les cours et toutes les ressources sont gratuits.', 2),
+     'Oui. Tous les cours et toutes les ressources de Peer Learning sont gratuits.', 2),
     ('Comment suivre un cours ?',
      'Choisissez un cours dans le catalogue, consultez son programme puis contactez-nous via la page Contact pour connaître les prochaines séances.', 3),
     ('Comment devenir tuteur ?',

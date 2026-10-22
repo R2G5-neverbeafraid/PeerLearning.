@@ -1,6 +1,5 @@
 """
 PEER LEARNING - Application Flask + SQLite
-Projet universitaire L1
 
 Lancer le site :  python app.py   puis ouvrir http://127.0.0.1:5000
 La base peerlearning.db est créée automatiquement au premier lancement
